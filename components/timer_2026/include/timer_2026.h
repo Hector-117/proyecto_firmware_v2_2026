@@ -371,4 +371,5 @@ void ll_update_current_time_value(ll_timer_t timer);
  * @param timer timer to be configured
  * @param interruption LL_CLR_T0_INT, LL_CLR_T1_INT, LL_CLR_WDT_int
  */
-void ll_clear_int(ll_timer_t timer, ll_clear_int_t interruption);
+//void ll_clear_int(ll_timer_t timer, ll_clear_int_t interruption);
+void ll_clear_int(ll_timer_t timer);

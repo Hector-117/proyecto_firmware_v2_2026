@@ -140,7 +140,7 @@ void bsp_timer_init(bsp_timer_config_t *timer_cfg)
 	//configurar modo de interrupcion
 	ll_timer_int_mode(timer_cfg->bsp_timer,timer_cfg->bsp_int_mode);
 	
-	//Finalmente habilitalo
+	//Finalmente habilitalo mijo
 	ll_timer_enable(timer_cfg->bsp_timer, true);
 	
 	//Set alarm
@@ -149,4 +149,9 @@ void bsp_timer_init(bsp_timer_config_t *timer_cfg)
 	//cargar el load
 	ll_set_load_value(timer_cfg->bsp_timer, timer_cfg->bsp_load_value);
 	ll_charge_load_value(timer_cfg->bsp_timer);
+}
+
+void bsp_reset_timer_loop(ll_timer_t timer){
+	ll_timer_alarm_enable(timer, true);
+	ll_clear_int(timer);
 }

@@ -177,12 +177,31 @@ void ll_update_current_time_value(ll_timer_t timer){
 	LL_SET_32BIT_REG(TIMGn_TxUPDATE_REG[timer],1);
 }
 
-void ll_clear_int(ll_timer_t timer, ll_clear_int_t interruption){
+/*void ll_clear_int(ll_timer_t timer, ll_clear_int_t interruption){
 	switch (interruption){
 		case LL_CLR_T0_INT:
 			LL_SET_BIT_T0_INT_CLR(TIMGn_INT_CLR_REG[timer]);
 			break;
 		case LL_CLR_T1_INT:
+			LL_SET_BIT_T1_INT_CLR(TIMGn_INT_CLR_REG[timer]);
+			break;
+		default:
+			LL_SET_BIT_WDT_INT_CLR(TIMGn_INT_CLR_REG[timer]);
+	}
+}*/
+
+void ll_clear_int(ll_timer_t timer){
+	switch (timer){
+		case LL_TIMG0_T0:
+			LL_SET_BIT_T0_INT_CLR(TIMGn_INT_CLR_REG[timer]);
+			break;
+		case LL_TIMG0_T1:
+			LL_SET_BIT_T1_INT_CLR(TIMGn_INT_CLR_REG[timer]);
+			break;
+		case LL_TIMG1_T0:
+			LL_SET_BIT_T0_INT_CLR(TIMGn_INT_CLR_REG[timer]);
+			break;
+		case LL_TIMG1_T1:
 			LL_SET_BIT_T1_INT_CLR(TIMGn_INT_CLR_REG[timer]);
 			break;
 		default:

@@ -146,4 +146,13 @@ typedef struct{
  */
 void bsp_timer_init(bsp_timer_config_t *timer_cfg);
 
+
+/**
+ * @brief function reset timer
+ * @param timer timer which his alarm will reset
+ * @details
+ * chinese people says it isn't needed but it needed :(
+ */
+void bsp_reset_timer_loop(ll_timer_t timer);
+
 #endif

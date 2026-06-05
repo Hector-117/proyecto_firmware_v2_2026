@@ -42,8 +42,7 @@ static void IRAM_ATTR timer_isr(void *arg)
 {
     webo = true;
 
-	ll_timer_alarm_enable(LL_TIMG0_T0, true);
-	ll_clear_int(LL_TIMG0_T0, LL_CLR_T0_INT);
+	bsp_reset_timer_loop(LL_TIMG0_T0);
 }
 
 void app_main(void)
@@ -110,7 +109,7 @@ void app_main(void)
     while(true){
 		if (webo){
 			webo = false;
-			printf("Hasta con BSP mijito, como la ve\n");
+			printf("cambio en la funcion de clear\n");
 		}
 		vTaskDelay(pdMS_TO_TICKS(250));
 	}
