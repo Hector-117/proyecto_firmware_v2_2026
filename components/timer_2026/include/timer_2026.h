@@ -16,6 +16,7 @@
  */
 
 #include <stdbool.h>
+#include <stdio.h>
 
 #define LLT_HWREG32(x)        (*((volatile uint32_t *)(x)))
 #define LLT_HW_PTR_REG32(x)   ((volatile uint32_t *)(x))
@@ -32,7 +33,6 @@
  * 
  * @note https://www.linkedin.com/posts/kshitij-vaze-dubistweltmeister05_the-arm-bus-interface-is-a-thing-of-beauty-activity-7370645131835822080-3EjC/
  */
-
 
 typedef enum{
 	LL_TIMG0_T0 = 0,
@@ -51,7 +51,6 @@ typedef enum{
 	LL_EDGE
 } ll_int_mode_t;
 
-//#define LL_TIMG0_T0CONFIG_REG (LLT_HWREG32(0x3FF5F000))
 #define LL_TIMG0_T0CONFIG_REG   LLT_HW_PTR_REG32(0x3FF5F000)
 #define LL_TIMG1_T0CONFIG_REG   LLT_HW_PTR_REG32(0x3FF60000)
 #define LL_TIMG0_T1CONFIG_REG   LLT_HW_PTR_REG32(0x3FF5F024)
@@ -82,7 +81,6 @@ typedef enum{
 #define LL_TIMGn_Tx_EN 		      (1<<31)
 #define LL_TIMGn_Tx_INCREASE      (1<<30)
 #define LL_TIMGn_Tx_AUTORELOAD    (1<<29)
-#define LL_CLEAR_TIMGn_Tx_DIVIDER (13)
 #define LL_TIMGn_Tx_EDGE_INT_EN   (1<<12)
 #define LL_TIMGn_Tx_LEVEL_INT_EN  (1<<11)
 #define LL_TIMGn_Tx_ALARM_EN	  (1<<10)
@@ -96,17 +94,23 @@ typedef enum{
 #define LL_ENABLE_AUTORELOAD(x)   (*(x) |= LL_TIMGn_Tx_AUTORELOAD)
 #define LL_DISABLE_AUTORELOAD(x)  (*(x) &= ~LL_TIMGn_Tx_AUTORELOAD)
 
-#define LL_ENABLE_EDGE_INT(x)  (*(x) = ((*(x) & ~LL_TIMGn_Tx_LEVEL_INT_EN) | LL_TIMGn_Tx_EDGE_INT_EN))
-#define LL_ENABLE_LEVEL_INT(x) (*(x) = ((*(x) & ~LL_TIMGn_Tx_EDGE_INT_EN) | LL_TIMGn_Tx_LEVEL_INT_EN))
+#define LL_ENABLE_EDGE_INT(x)  (*(x) |= LL_TIMGn_Tx_EDGE_INT_EN)
+#define LL_DISABLE_EDGE_INT(x) (*(x) &= ~LL_TIMGn_Tx_EDGE_INT_EN)
+
+#define LL_ENABLE_LEVEL_INT(x)  (*(x) |= LL_TIMGn_Tx_LEVEL_INT_EN)
+#define LL_DISABLE_LEVEL_INT(x) (*(x) &= ~LL_TIMGn_Tx_LEVEL_INT_EN)
 
 #define LL_ENABLE_ALARM(x)  (*(x) |= LL_TIMGn_Tx_ALARM_EN)
 #define LL_DISABLE_ALARM(x) (*(x) &= ~LL_TIMGn_Tx_ALARM_EN)
 
-#define LL_CLEAR_DIVIDER(x) (*(x) &= ((~0xFFFF)<<13))
-#define LL_SET_DIVIDER(x,prescaler)   (*(x) |= (prescaler << 13))
+#define LL_CLEAR_DIVIDER(x) 		(*(x) &= ~(0xFFFF<<13))
+#define LL_SET_DIVIDER(x,prescaler) (*(x) |= (prescaler << 13))
 
 
 #define LL_TIMG0_T0ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF5F010))
+#define LL_TIMG1_T0ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF60010))
+#define LL_TIMG0_T1ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF5F034))
+#define LL_TIMG1_T1ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF60034))
 /**
  * @brief Timer x alarm trigger time-base counter value, low 32 bits. (R/W)
  *
@@ -117,6 +121,9 @@ typedef enum{
  */
 
 #define LL_TIMG0_T0ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF5F014))
+#define LL_TIMG1_T0ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF60014))
+#define LL_TIMG0_T1ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF5F038))
+#define LL_TIMG1_T1ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF60038))
 /**
  * @brief Timer x alarm trigger time-base counter value, high 32 bits. (R/W)
  *
@@ -129,37 +136,112 @@ typedef enum{
 /**
  * a reload will cause the contents of these registers to be copied to the counter itself. 
  * A reload event can be triggered by an alarm auto-reload at alarm) or by software (software instant reload)
- * 		LL_TIMG0_T0LOADLO_REG
- * 		LL_TIMG0_T0LOADHI_REG
+ * 		* LL_TIMG0_T0LOADLO_REG
+ * 		* LL_TIMG0_T0LOADHI_REG
  * @note page 223
  */
 
 #define LL_TIMG0_T0LOADLO_REG (LLT_HW_PTR_REG32(0x3FF5F018))
+#define LL_TIMG1_T0LOADLO_REG (LLT_HW_PTR_REG32(0x3FF60018))
+#define LL_TIMG0_T1LOADLO_REG (LLT_HW_PTR_REG32(0x3FF5F03C))
+#define LL_TIMG1_T1LOADLO_REG (LLT_HW_PTR_REG32(0x3FF6003C))
 /**
  * @brief Timer 0 reload value, low 32 bits
  *
  * @details
  *     [x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x]
  *								0x000000000								Reset
+ * 
+ * After writing to TIMGn_TxUPDATE_REG, the low 32 bits of the time-base counter
+ * of timer x can be read here. (RO)
+ * 
  * @note Page 244 (esp32_technical_reference_manual_v5.5).
  */
 
 #define LL_TIMG0_T0LOADHI_REG (LLT_HW_PTR_REG32(0x3FF5F01C))
+#define LL_TIMG1_T0LOADHI_REG (LLT_HW_PTR_REG32(0x3FF6001C))
+#define LL_TIMG0_T1LOADHI_REG (LLT_HW_PTR_REG32(0x3FF5F040))
+#define LL_TIMG1_T1LOADHI_REG (LLT_HW_PTR_REG32(0x3FF60040))
 /**
  * @brief Timer 0 reload value, high 32 bits
  *
  * @details
  *     [x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x]
  *								0x000000000								Reset
+ * 
+ * After writing to TIMGn_TxUPDATE_REG, the high 32 bits of the time-base counter
+ * of timer x can be read here. (RO)
+ * 
  * @note Page 224 (esp32_technical_reference_manual_v5.5).
  */
 
-#define LL_CLEAR_32BIT_REG(x) (*(x) = 0)
-//#define LL_SET_32BIT_REG(x,value)  (*(x) |= value)
+#define LL_TIMG0_T0LOAD_REG (LLT_HW_PTR_REG32(0x3FF5F020))
+#define LL_TIMG1_T0LOAD_REG (LLT_HW_PTR_REG32(0x3FF60020))
+#define LL_TIMG0_T1LOAD_REG (LLT_HW_PTR_REG32(0x3FF5F044))
+#define LL_TIMG1_T1LOAD_REG (LLT_HW_PTR_REG32(0x3FF60044))
+/**
+ * @brief Write to reload timer from TIMGn_T0_(LOADLOLOADHI)_REG
+ *
+ * @details
+ * Write any value to trigger a timer x time-base counter reload. (WO)
+ *
+ * @note Page 495
+ */
+
+#define LL_TIMG0_T0LO_REG (LLT_HW_PTR_REG32(0x3FF5F004))
+#define LL_TIMG1_T0LO_REG (LLT_HW_PTR_REG32(0x3FF60004))
+#define LL_TIMG0_T1LO_REG (LLT_HW_PTR_REG32(0x3FF5F028))
+#define LL_TIMG1_T1LO_REG (LLT_HW_PTR_REG32(0x3FF60028))
+/**
+ * @brief Timer 0 current value, low 32 bits
+ *
+ * @details
+ *     [x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x]
+ *								0x000000000								Reset
+ *
+ * After writing to TIMGn_TxUPDATE_REG, the low 32 bits of the time-base counter
+ * of timer x can be read here. (RO) 
+ *
+ * @note Page 497.
+ */
+
+#define LL_TIMG0_T0HI_REG (LLT_HW_PTR_REG32(0x3FF5F008))
+#define LL_TIMG1_T0HI_REG (LLT_HW_PTR_REG32(0x3FF60008))
+#define LL_TIMG0_T1HI_REG (LLT_HW_PTR_REG32(0x3FF5F02C))
+#define LL_TIMG1_T1HI_REG (LLT_HW_PTR_REG32(0x3FF6002C))
+/**
+ * @brief Timer 0 current value, high 32 bits
+ *
+ * @details
+ *     [x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x]
+ *								0x000000000								Reset
+ *
+ * After writing to TIMGn_TxUPDATE_REG, the high 32 bits of the time-base counter
+ * of timer x can be read here. (RO)
+ *
+ * @note Page 497.
+ */
+
+#define LL_TIMGn_T0UPDATE_REG (LLT_HW_PTR_REG32(0x3FF5F00C))
+#define LL_TIMGn_T1UPDATE_REG (LLT_HW_PTR_REG32(0x3FF5F030))
+/**
+ * @brief Write to copy current timer value to TIMGn_T0_(LO/HI)_REG
+ *
+ * @details
+ * Write any value to trigger a timer x time-base counter value update (timer x
+ * current value will be stored in registers above). (WO)
+ *
+ * @note Page 495
+ */
+
+
+#define LL_CLEAR_32BIT_REG(x) 	   (*(x) = 0)
 #define LL_SET_32BIT_REG(x,value)  (*(x) = value)
 
 
+
 #define LL_TIMG0_INT_RAW_REG (LLT_HW_PTR_REG32(0x3FF5F09C))
+#define LL_TIMG1_INT_RAW_REG (LLT_HW_PTR_REG32(0x3FF6009C))
 /**
  * @brief Raw interrupt status
  *
@@ -184,6 +266,7 @@ typedef enum{
 
 
 #define LL_TIMG0_INT_CLR_REG (LLT_HW_PTR_REG32(0x3FF5F0A4))
+#define LL_TIMG1_INT_CLR_REG (LLT_HW_PTR_REG32(0x3FF600A4))
 /**
  * @brief Interrupt clear bits
  *
@@ -202,17 +285,71 @@ typedef enum{
 #define LL_TIMGn_Tx_INT_T1_INT_CLR  (1<<1)
 #define LL_TIMGn_Tx_INT_WDT_INT_CLR (1<<2)
 
-#define LL_SET_BIT_WDT_INT_CLR(x) (*(x) = LL_TIMGn_Tx_INT_WDT_INT_CLR)
-#define LL_SET_BIT_T1_INT_CLR(x)  (*(x) = LL_TIMGn_Tx_INT_T1_INT_CLR)
 #define LL_SET_BIT_T0_INT_CLR(x)  (*(x) = LL_TIMGn_Tx_INT_T0_INT_CLR)
+#define LL_SET_BIT_T1_INT_CLR(x)  (*(x) = LL_TIMGn_Tx_INT_T1_INT_CLR)
+#define LL_SET_BIT_WDT_INT_CLR(x) (*(x) = LL_TIMGn_Tx_INT_WDT_INT_CLR)
 
-#define LL_TIMG0_T0LOAD_REG (LLT_HW_PTR_REG32(0x3FF5F020))
-#define LL_TIMG0_T0UPDATE_REG (LLT_HW_PTR_REG32(0x3FF5F00C))
-#define LL_TIMG0_T0LO_REG (LLT_HWREG32(0x3FF5F004))
 
+//===================Funciones chidas para manejar el timer===================
+/**
+ * @brief function for enabling timer
+ * @param timer timer that will be enabled
+ * @param bit_state True: start counting, false: stop counting
+ */
 void ll_timer_enable(ll_timer_t timer, bool bit_state);
+
+/**
+ * @brief function for set count mode
+ * @param timer timer to be configured
+ * @param mode LL_UP:upwards or LL_DOWN: downwards
+ */
 void ll_timer_count_mode(ll_timer_t timer, ll_count_mode_t mode);
+
+/**
+ * @brief function for select if timer will autoreload
+ * @param timer timer to be configured
+ * @param mode true, false
+ */
 void ll_timer_autoreload(ll_timer_t timer, bool mode);
+
+/**
+ * @brief function for select the interruption mode
+ * @param timer timer to be configured
+ * @param mode LL_LEVEL, LL_EDGE
+ */
 void ll_timer_int_mode(ll_timer_t timer, ll_int_mode_t mode);
-void ll_timer_alarm (ll_timer_t timer, bool mode);
+
+/**
+ * @brief function for enable alarm timer
+ * @param timer timer to be configured
+ * @param mode true, false
+ */
+void ll_timer_alarm_enable(ll_timer_t timer, bool mode);
+
+/**
+ * @brief function setting the freq divider
+ * @param timer timer to be configured
+ * @param divider value of the freq divider
+ * @note consider APB_CLK 80 MHz
+ */
 void ll_set_freq_divider (ll_timer_t timer, int divider);
+
+/**
+ * @brief function setting the alarm value
+ * @param timer timer to be configured
+ * @param value value when alarm will rise
+ */
+void ll_set_alarm_value(ll_timer_t timer, uint64_t value);
+
+/**
+ * @brief function setting the load value
+ * @param timer timer to be configured
+ * @param value value of load
+ */
+void ll_set_load_value(ll_timer_t timer, uint64_t value);
+
+/**
+ * @brief function for charging the load value
+ * @param timer timer to be configured
+ */
+void ll_charge_load_value(ll_timer_t timer);
