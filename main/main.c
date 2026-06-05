@@ -43,9 +43,12 @@ static void IRAM_ATTR timer_isr(void *arg)
 {
     webo = true;
 
-	TIMGn_T0UPDATE_REG = 1;
-	TIMG0_T0CONFIG_REG |= (1<<10);
-	TIMGn_Tx_INT_CLR_REG = 1;
+	//TIMGn_T0UPDATE_REG = 1;
+	//TIMG0_T0CONFIG_REG |= (1<<10);
+	ll_timer_alarm_enable(LL_TIMG0_T0, true);
+	
+	//TIMGn_Tx_INT_CLR_REG = 1;
+	ll_clear_int(LL_TIMG0_T0, LL_CLR_T0_INT);
 }
 
 void app_main(void)
@@ -104,7 +107,7 @@ void app_main(void)
 	//printf("Registro TIMGn_T0LOADHI_REG: %" PRIx32 "\n", TIMGn_T0LOADHI_REG);
 	ll_set_load_value(LL_TIMG0_T0, 0);
 
-	TIMGn_T0LOAD_REG = 1;
+	//TIMGn_T0LOAD_REG = 1;
 	ll_charge_load_value(LL_TIMG0_T0);
 	
 	printf("Registro TIMGn_T0LOAD_REG: %" PRIx32 "\n", TIMGn_T0LOAD_REG);
@@ -123,7 +126,7 @@ void app_main(void)
     while(true){
 		if (webo){
 			webo = false;
-			printf("CHECKEO Configuracion completa con funciones propias\n");
+			printf("Ahora si de ahora si, solo funciones propias\n");
 		}
 		vTaskDelay(pdMS_TO_TICKS(250));
 	}

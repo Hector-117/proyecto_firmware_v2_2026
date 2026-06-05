@@ -280,6 +280,12 @@ typedef enum{
  * [2] TIMGn_Tx_INT_T0_INT_CLR Set this bit to clear the TIMGn_Tx_INT_T0_INT interrupt. (WO)
  * @note Page 504.
  */
+
+typedef enum{
+	LL_CLR_T0_INT,
+	LL_CLR_T1_INT,
+	LL_CLR_WDT_int
+} ll_clear_int_t;
  
 #define LL_TIMGn_Tx_INT_T0_INT_CLR  (1<<0)
 #define LL_TIMGn_Tx_INT_T1_INT_CLR  (1<<1)
@@ -353,3 +359,16 @@ void ll_set_load_value(ll_timer_t timer, uint64_t value);
  * @param timer timer to be configured
  */
 void ll_charge_load_value(ll_timer_t timer);
+
+/**
+ * @brief function for copy current timer value to TIMGn_T0_(LO/HI)_REG
+ * @param timer timer to be configured
+ */
+void ll_update_current_time_value(ll_timer_t timer);
+
+/**
+ * @brief function clear raised int flag
+ * @param timer timer to be configured
+ * @param interruption LL_CLR_T0_INT, LL_CLR_T1_INT, LL_CLR_WDT_int
+ */
+void ll_clear_int(ll_timer_t timer, ll_clear_int_t interruption);
