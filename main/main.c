@@ -10,60 +10,71 @@
  * @author José Francisco Padilla Torres
  * @date 2026-06-01
  */
+#include "soc/timer_group_struct.h"
+#include "soc/timer_group_reg.h"
+ 
 #include "bsp_board.h"
 #include "../components/timer_2026/include/timer_2026.h"
-#include "driver/gptimer.h"
 #include <inttypes.h> // Required for PRIu32
-#include "esp_err.h"
+//#include "esp_err.h"
+#include "driver/timer.h"
+#include "esp_intr_alloc.h"
 
-bool timer_flag = false;
+volatile bool webo = false;
 
-static bool example_timer_on_alarm_cb(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_ctx)
-	{
-	    //printf("Hola desde la interrupcion jeje\n");
-	    timer_flag = true;
-	    return false;
-	}
+static intr_handle_t timer_handle;
+
+static void IRAM_ATTR timer_isr(void *arg)
+{
+    timer_group_clr_intr_status_in_isr(
+        TIMER_GROUP_0,
+        TIMER_0
+    );
+
+    webo = true;
+
+    timer_group_enable_alarm_in_isr(
+        TIMER_GROUP_0,
+        TIMER_0
+    );
+}
 
 void app_main(void)
 {
-	gptimer_handle_t gptimer = NULL;
+	timer_config_t config = {
+        .divider = 80,          // 80 MHz / 80 = 1 MHz
+        .counter_dir = TIMER_COUNT_UP,
+        .counter_en = TIMER_PAUSE,
+        .alarm_en = TIMER_ALARM_EN,
+        .auto_reload = true,
+    };
 
-	gptimer_config_t timer_config = {
-	    .clk_src = GPTIMER_CLK_SRC_DEFAULT, // Select the default clock source
-	    .direction = GPTIMER_COUNT_UP,      // Counting direction is up
-	    .resolution_hz = 1 * 1000 * 1000,   // Resolution is 1 MHz, i.e., 1 tick equals 1 microsecond
-	};
-	// Create a timer instance
-	ESP_ERROR_CHECK(gptimer_new_timer(&timer_config, &gptimer));
-	
-	gptimer_alarm_config_t alarm_config = {
-	    .reload_count = 0,      // When the alarm event occurs, the timer will automatically reload to 0
-	    .alarm_count = 1000000, // Set the actual alarm period, since the resolution is 1us, 1000000 represents 1s
-	    .flags.auto_reload_on_alarm = true, // Enable auto-reload function
-	};
-	// Set the timer's alarm action
-	ESP_ERROR_CHECK(gptimer_set_alarm_action(gptimer, &alarm_config));
-	
-	gptimer_event_callbacks_t cbs = {
-	    .on_alarm = example_timer_on_alarm_cb, // Call the user callback function when the alarm event occurs
-	};
-	// Register timer event callback functions, allowing user context to be carried
-	ESP_ERROR_CHECK(gptimer_register_event_callbacks(gptimer, &cbs, NULL));
-	// Enable the timer
-	ESP_ERROR_CHECK(gptimer_enable(gptimer));
-	// Start the timer
-	ESP_ERROR_CHECK(gptimer_start(gptimer));
-	
-	while(true){
-		printf("Programa prueb GPTIMER chido\n");
-		
-		if (timer_flag)
-    	{
-        	timer_flag = false;
-        	printf("Hola desde el timer\n");
-    	}
+    timer_init(TIMER_GROUP_0, TIMER_0, &config);
 
-	    vTaskDelay(pdMS_TO_TICKS(1000));
+    // 1 MHz => 1 000 000 ticks = 1 segundo
+    timer_set_alarm_value(
+        TIMER_GROUP_0,
+        TIMER_0,
+        1000000
+    );
+
+    timer_enable_intr(TIMER_GROUP_0, TIMER_0);
+
+    esp_intr_alloc(
+        ETS_TG0_T0_LEVEL_INTR_SOURCE,
+        ESP_INTR_FLAG_IRAM,
+        timer_isr,
+        NULL,
+        &timer_handle
+    );
+
+    timer_start(TIMER_GROUP_0, TIMER_0);
+    
+    while(true){
+		if (webo){
+			webo = false;
+			printf("Hola activado por la ISR\n");
+		}
+		vTaskDelay(pdMS_TO_TICKS(250));
 	}
 }
