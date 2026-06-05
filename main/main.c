@@ -15,75 +15,71 @@
 #include "driver/gptimer.h"
 #include <inttypes.h> // Required for PRIu32
 
-
-//gptimer_handle_t my_timer = NULL;
-
-
-//#define HWREG32TIMER(x)        (*((volatile uint32_t *)(x)))
-//#define TIMGn_T0CONFIG_REG 	   (HWREG32TIMER(0x3FF5F000))
-//#define TIMGn_T0LO_REG 		   (HWREG32TIMER(0x3FF5F004))
-//#define TIMGn_T0HI_REG 		   (HWREG32TIMER(0x3FF5F008))
-//#define TIMGn_T0UPDATE_REG     (HWREG32TIMER(0x3FF5F00C))
-//#define TIMGn_T0ALARMLO_REG    (HWREG32TIMER(0x3FF5F010))
-//#define TIMGn_T0ALARMHI_REG    (HWREG32TIMER(0x3FF5F014))
-//#define TIMGn_T0LOADLO_REG     (HWREG32TIMER(0x3FF5F018))
-//#define TIMGn_T0LOAD_REG       (HWREG32TIMER(0x3FF5F020))
-
-
-/*bool timer_callback(gptimer_handle_t timer,
-                    const gptimer_alarm_event_data_t *edata,
-                    void *user_data)
-{
-	printf("ikanaaaaaiiddeeeeee\n");
-    bsp_RGB_led_toggle(BSP_RGB_BLUELED);
-    return false;
-}*/
-
+#define TIMG0_T0CONFIG_REG   (*((volatile uint32_t *)(0x3FF5F000)))
+#define TIMGn_T0ALARMLO_REG  (*((volatile uint32_t *)(0x3FF5F010)))
+#define TIMGn_T0ALARMHI_REG  (*((volatile uint32_t *)(0x3FF5F014)))
+#define TIMGn_T0LOADLO_REG   (*((volatile uint32_t *)(0x3FF5F018)))
+#define TIMGn_T0LOADHI_REG   (*((volatile uint32_t *)(0x3FF5F01C)))
+#define TIMGn_T0LOAD_REG     (*((volatile uint32_t *)(0x3FF5F020)))
+#define TIMGn_T0UPDATE_REG   (*((volatile uint32_t *)(0x3FF5F00C)))
+#define TIMGn_T0LO_REG       (*((volatile uint32_t *)(0x3FF5F004)))
+#define TIMGn_Tx_INT_RAW_REG (*((volatile uint32_t *)(0x3FF5F09C)))
 
 /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
 void app_main(void)
 {
-	ll_timer_enable(LL_TIMG0_T0, false);
-	printf("Value enable: %" PRIx32 "\n", *LL_TIMG0_T0CONFIG_REG);
+	//Ver configuracion inicial del registro
+	printf("Registro config(default): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
 	
-	ll_timer_count_mode(LL_TIMG0_T0, LL_UP);
-	printf("Value up/down: %" PRIx32 "\n", *LL_TIMG0_T0CONFIG_REG);
+	//configurar no enable
+	TIMG0_T0CONFIG_REG &= ~(1<<31);
+	printf("Registro config(enable desactivado): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
 	
-	ll_timer_autoreload(LL_TIMG0_T0, true);
-	printf("Value reload: %" PRIx32 "\n", *LL_TIMG0_T0CONFIG_REG);
+	//configurar modo ascendente
+	TIMG0_T0CONFIG_REG |= (1<<30);
+	printf("Registro config(modo ascendente): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
 	
-	ll_set_freq_divider(LL_TIMG0_T0, 80);
-	printf("Value divisor: %" PRIx32 "\n", *LL_TIMG0_T0CONFIG_REG);
-	
-	ll_timer_alarm(LL_TIMG0_T0, true);
-	printf("Valu alarme: %" PRIx32 "\n", *LL_TIMG0_T0CONFIG_REG);
-	
-	ll_timer_int_mode(LL_TIMG0_T0, LL_EDGE);
-	printf("Value edge: %" PRIx32 "\n", *LL_TIMG0_T0CONFIG_REG);
-	//ojo, debe ser en este orden, si no agrega un 1 de más y aun no se porque
-	
-	LL_SET_32BIT_REG(LL_TIMG0_T0ALARMLO_REG, 300000);
-	LL_SET_32BIT_REG(LL_TIMG0_T0ALARMHI_REG, 0);
-	LL_SET_32BIT_REG(LL_TIMG0_T0LOADLO_REG, 0);
-	LL_SET_32BIT_REG(LL_TIMG0_T0LOADHI_REG, 0);
-	LL_SET_32BIT_REG(LL_TIMG0_T0LOAD_REG, 1);
-	
-	ll_timer_enable(LL_TIMG0_T0, true);
-	
-	LL_SET_32BIT_REG(LL_TIMG0_T0UPDATE_REG,1);
-	printf("Value: %" PRIu32 "\n", LL_TIMG0_T0LO_REG);
-		
-	printf("ALARM_LO=%" PRIu32 "\n", *LL_TIMG0_T0ALARMLO_REG);
-	printf("ALARM_HI=%" PRIu32 "\n", *LL_TIMG0_T0ALARMHI_REG);
-	
-	LL_SET_32BIT_REG(LL_TIMG0_T0UPDATE_REG,1);
-	printf("CNT=%" PRIu32 " RAW=%d\n",
-           		LL_TIMG0_T0LO_REG,
-           		LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG));
-	
-	//
-	bsp_init();
+	//configurar modo autoreload
+	TIMG0_T0CONFIG_REG |= (1<<29);
+	printf("Registro config(modo Autoreolad): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
 
+	//configurar modo divisor de frecuencia
+	TIMG0_T0CONFIG_REG &= ~(0xFFFF<<13);
+	TIMG0_T0CONFIG_REG |= (80<<13);
+	printf("Registro config(divisor de freq): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
+
+	//configurar la alarma
+	TIMG0_T0CONFIG_REG |= (1<<10);
+	printf("Registro config(enable alarma): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
+	
+	//configurar modo de interrupcion
+	TIMG0_T0CONFIG_REG &= ~(1<<11); //Tumbar el level
+	TIMG0_T0CONFIG_REG |= (1<<12); //subir el edge
+	printf("Registro config(modo int): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
+	
+	TIMGn_T0ALARMLO_REG = 300000;
+	printf("Registro TIMGn_T0ALARMLO_REG: %" PRIx32 "\n", TIMGn_T0ALARMLO_REG);
+
+	TIMGn_T0ALARMHI_REG = 0;
+	printf("Registro TIMGn_T0ALARMHI_REG: %" PRIx32 "\n", TIMGn_T0ALARMHI_REG);
+
+	TIMGn_T0LOADLO_REG = 0;
+	printf("Registro TIMGn_T0LOADLO_REG: %" PRIx32 "\n", TIMGn_T0LOADLO_REG);
+
+	TIMGn_T0LOADHI_REG = 0;
+	printf("Registro TIMGn_T0LOADHI_REG: %" PRIx32 "\n", TIMGn_T0LOADHI_REG);
+
+	TIMGn_T0LOAD_REG = 1;
+	printf("Registro TIMGn_T0LOAD_REG: %" PRIx32 "\n", TIMGn_T0LOAD_REG);
+
+	//Finalmente habilitalo
+	TIMG0_T0CONFIG_REG |= (1<<31);
+	printf("Registro config(enable desactivado): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
+
+	//Configuracion final
+	printf("Registro config(final): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
+
+	bsp_init();
 	
 	bool led_state_18 [] = {false, true}; // ESTADOS DEL LED PARA APAGADO Y ENCENDIDO
 	bool state_pin18 = true;
@@ -92,78 +88,31 @@ void app_main(void)
 	bool led_state_19 [] = {false, true}; // ESTADOS DEL LED PARA APAGADO Y ENCENDIDO
 	bool state_pin19 = true;
 	bool state_pin19_old = true;
-	
-	LL_SET_32BIT_REG(LL_TIMG0_T0UPDATE_REG,1);
-	printf("CNT=%" PRIu32 " RAW=%d\n",
-           		LL_TIMG0_T0LO_REG,
-           		LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG));
+
+	TIMGn_T0UPDATE_REG = 1;
+	printf("CNT=%" PRIu32 " RAW=%" PRIu32, TIMGn_T0LO_REG, TIMGn_Tx_INT_RAW_REG);
 	
 	while(true){
-		printf("ching cheng hanji\n");
-		
-		printf("Value: %" PRIx32 "\n", *LL_TIMG0_T0CONFIG_REG);//LL_TIMG0_T0CONFIG_REG
-		printf("Autoreolad LOW: %" PRIx32 "\n", *LL_TIMG0_T0LOADLO_REG);//LL_TIMG0_T0CONFIG_REG
-		printf("Autoreolad HIGH: %" PRIx32 "\n", *LL_TIMG0_T0LOADHI_REG);//LL_TIMG0_T0CONFIG_REG
-		printf("ALARM_LO=%" PRIu32 "\n", *LL_TIMG0_T0ALARMLO_REG);
-		printf("ALARM_HI=%" PRIu32 "\n", *LL_TIMG0_T0ALARMHI_REG);
-		printf("olaywan to sey is da dey donrili ker abaos\n");
-		
-		LL_SET_32BIT_REG(LL_TIMG0_T0UPDATE_REG,1);
-	    printf("fuera: CNT=%" PRIu32 " RAW=%d\n",
-           		LL_TIMG0_T0LO_REG,
-           		LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG));
-		
+		printf("Programa prueba RAW\n");
+
+		//Checar que no haya cambios en la configuracion
+		printf("Registro config(final): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
+
 		while(1){
 			//LL_SET_32BIT_REG(LL_TIMG0_T0UPDATE_REG,1);
-			if(LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG))
+			if(TIMGn_Tx_INT_RAW_REG)
 				{
 					printf("===================================\n");
-				    //printf("Value: %" PRIx32 "\n", *LL_TIMG0_T0CONFIG_REG);
-				    LL_SET_32BIT_REG(LL_TIMG0_T0UPDATE_REG,1);
-				    printf("dentro: CNT=%" PRIu32 " RAW=%d\n",
-           					LL_TIMG0_T0LO_REG,
-           					LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG));
+				    //Checar que no haya cambios en la configuracion
+					printf("Registro config(final): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
+				    TIMGn_T0UPDATE_REG = 1;
+					printf("CNT=%" PRIu32 " RAW=%" PRIu32, TIMGn_T0LO_REG, TIMGn_Tx_INT_RAW_REG);
            			
-           			printf("ALARM_LO=%" PRIu32 "\n", *LL_TIMG0_T0ALARMLO_REG);
-					printf("ALARM_HI=%" PRIu32 "\n", *LL_TIMG0_T0ALARMHI_REG);
-					printf("Value: %" PRIx32 "\n", *LL_TIMG0_T0CONFIG_REG);
-					ll_timer_enable(LL_TIMG0_T0, false);
-					ll_timer_alarm(LL_TIMG0_T0, true);
-					printf("cbrn no se muevaValue: %" PRIx32 "\n", *LL_TIMG0_T0CONFIG_REG);
-					ll_timer_enable(LL_TIMG0_T0, true);
-				
-				    LL_SET_BIT_T0_INT_CLR(LL_TIMG0_INT_CLR_REG);
-				}
-			
-			/*if(LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG)){
-		        printf("INT!================================================================\n");
-		        LL_SET_BIT_T0_INT_CLR(LL_TIMG0_INT_CLR_REG);
-		    }
-		    
-		    LL_SET_32BIT_REG(LL_TIMG0_T0UPDATE_REG,1);
-	    	printf("CNT=%" PRIu32 " RAW=%d\n",
-           		LL_TIMG0_T0LO_REG,
-           		LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG));*/
-			
-			/*printf("CNT=%" PRIu32 " RAW=%d\n",
-           		LL_TIMG0_T0LO_REG,
-           		LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG));*/
-			/*if(LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG)){
-				LL_SET_BIT_T0_INT_CLR(LL_TIMG0_INT_CLR_REG);
-			}*/
-			//LL_SET_32BIT_REG(LL_TIMG0_T0UPDATE_REG,1);
-	    	//printf("Value: %" PRIu32 "\n", LL_TIMG0_T0LO_REG);
-	    	
-	    	/*printf("CNT=%" PRIu32 " RAW=%d\n",
-           		LL_TIMG0_T0LO_REG,
-           		LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG));*/
-           		
-           	//printf("INT_RAW = 0x%08" PRIX32 "\n", *LL_TIMG0_INT_RAW_REG);
-	    	
+				}    	
 	    	vTaskDelay(pdMS_TO_TICKS(10));
 		}
 		
-		state_pin18 = bsp_pressed_button(BSP_PUSH_BUTTON_0);
+		/*state_pin18 = bsp_pressed_button(BSP_PUSH_BUTTON_0);
 		state_pin19 = bsp_pressed_button(BSP_PUSH_BUTTON_1);
 
 		if ((state_pin18 == false) && (state_pin18_old == true)){ //DETECCIÓN DE FALNCO DESCENDENTE EN PIN18
@@ -180,57 +129,7 @@ void app_main(void)
 		}
 		state_pin19_old = state_pin19;
 		
-	    /*bsp_led_toggle(BSP_LED0);
-	    bsp_led_toggle(BSP_LED1);
-	    bsp_led_toggle(BSP_LED2);
-	    bsp_led_toggle(BSP_LED3);
-	    bsp_led_toggle(BSP_LED4);
+		printf("jalooooooooo\n");*/
 	    
-	    bsp_RGB_led_toggle(BSP_RGB_REDLED);
-	    bsp_RGB_led_toggle(BSP_RGB_GREENLED);
-	    bsp_RGB_led_toggle(BSP_RGB_BLUELED);*/
-	    	    
-	    printf("RAW antes clear = %08" PRIX32 "\n", *LL_TIMG0_INT_RAW_REG);
-
-		LL_SET_BIT_T0_INT_CLR(LL_TIMG0_INT_CLR_REG);
-		
-		printf("RAW despues clear = %08" PRIX32 "\n", *LL_TIMG0_INT_RAW_REG);
-	    
-	    //LL_SET_BIT_T0_INT_CLR(LL_TIMG0_INT_CLR_REG);	
-	    LL_SET_32BIT_REG(LL_TIMG0_T0UPDATE_REG,1);
-	    
-	    LL_SET_32BIT_REG(LL_TIMG0_T0UPDATE_REG,1);
-
-		printf("CNT actual = %" PRIu32 "\n",LL_TIMG0_T0LO_REG);
-	        
-	    while(1){
-			printf("no int_detect: CNT=%" PRIu32 " ALARM=%" PRIu32 "\n",
-       		LL_TIMG0_T0LO_REG,
-       		*LL_TIMG0_T0ALARMLO_REG);
-			
-			if(*LL_TIMG0_INT_RAW_REG){
-		        printf("RAW = %08" PRIX32 "\n", *LL_TIMG0_INT_RAW_REG);
-		    }
-		    
-		    if(LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG)){
-				printf("ya la detecto: CNT=%" PRIu32 " ALARM=%" PRIu32 "\n",
-	       		LL_TIMG0_T0LO_REG,
-	       		*LL_TIMG0_T0ALARMLO_REG);
-					
-				
-		        printf("INT!\n");
-		        LL_SET_BIT_T0_INT_CLR(LL_TIMG0_INT_CLR_REG);
-		        break;
-		    }
-			
-			/*if(LL_READ_STATE_T0_INT_RAW(LL_TIMG0_INT_RAW_REG)){
-				LL_SET_BIT_T0_INT_CLR(LL_TIMG0_INT_CLR_REG);
-				break;
-			}*/
-		}
-		
-		printf("jalooooooooo\n");
-	    
-	    //vTaskDelay(1000 / portTICK_PERIOD_MS); //RETRAZO DE 5 SEGUNDOS
 	}
 }
