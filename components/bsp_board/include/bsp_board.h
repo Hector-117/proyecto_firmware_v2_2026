@@ -14,7 +14,9 @@
 #define BSP_BOARD_H
 
 #include "../../gpio_2026/include/gpio_2026.h"
+#include "../../timer_2026/include/timer_2026.h"
 
+// ======================================================= GPIO ======================================================= 
 // =============== Name abstraction for board =============== 
 #define BSP_LED0 LL_GPIO2
 #define BSP_LED1 LL_GPIO4
@@ -118,6 +120,30 @@ void bsp_RGB_led_toggle(int led);
  */ 
 bool bsp_pressed_button(int button);
 
+// ======================================================= TIMER ======================================================= 
+/**
+ * @brief structure for timer configuration
+ * @details
+ * This structure store all data configuration for timer, in order to configurate
+ * a timer the user have to send this structure to bsp_timer_init() function.
+ */
+typedef struct{
+	ll_timer_t 		bsp_timer;
+	int 			bsp_freq_divider;
+	ll_count_mode_t bsp_count_mode;
+	bool 			bsp_alarm_enable;
+	bool 			bsp_autoreload_enable;
+	ll_int_mode_t 	bsp_int_mode;
+	uint64_t 		bsp_alarm_value;
+	uint64_t 		bsp_load_value;
+} bsp_timer_config_t;
 
+/**
+ * @brief function for timer config
+ * @param timer_cfg receives a structure which stores all timer config data
+ * @details
+ * This functions configure the timer with all data stored in the structure timer_cfg received
+ */
+void bsp_timer_init(bsp_timer_config_t *timer_cfg);
 
 #endif

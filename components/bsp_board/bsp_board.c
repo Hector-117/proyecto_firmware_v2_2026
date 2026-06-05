@@ -12,7 +12,7 @@
  */
 #include <stdio.h>
 #include "bsp_board.h"
-
+// ======================================================= GPIO ======================================================= 
 static uint8_t bsp_led_vector = 0;
 static uint8_t bsp_rgb_vector = 0;
 
@@ -116,4 +116,37 @@ void bsp_RGB_led_toggle(int led){
 
 bool bsp_pressed_button(int button){
 	return (ll_gpio_read(button) == 1);
+}
+
+
+// ======================================================= TIMER ======================================================= 
+void bsp_timer_init(bsp_timer_config_t *timer_cfg)
+{
+    //configurar no enable
+	ll_timer_enable(timer_cfg->bsp_timer, false);
+	
+	//configurar modo divisor de frecuencia
+	ll_set_freq_divider (timer_cfg->bsp_timer, timer_cfg->bsp_freq_divider);
+	
+	//configurar modo ascendente
+	ll_timer_count_mode(timer_cfg->bsp_timer, timer_cfg->bsp_count_mode);
+	
+	//configurar la alarma
+	ll_timer_alarm_enable(timer_cfg->bsp_timer, timer_cfg->bsp_alarm_enable);
+	
+	//configurar modo autoreload
+	ll_timer_autoreload(timer_cfg->bsp_timer, timer_cfg->bsp_autoreload_enable);
+	
+	//configurar modo de interrupcion
+	ll_timer_int_mode(timer_cfg->bsp_timer,timer_cfg->bsp_int_mode);
+	
+	//Finalmente habilitalo
+	ll_timer_enable(timer_cfg->bsp_timer, true);
+	
+	//Set alarm
+	ll_set_alarm_value(timer_cfg->bsp_timer, timer_cfg->bsp_alarm_value);
+	
+	//cargar el load
+	ll_set_load_value(timer_cfg->bsp_timer, timer_cfg->bsp_load_value);
+	ll_charge_load_value(timer_cfg->bsp_timer);
 }
