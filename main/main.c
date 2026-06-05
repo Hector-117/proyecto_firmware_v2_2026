@@ -42,7 +42,7 @@ static void IRAM_ATTR timer_isr(void *arg)
 {
     webo = true;
 
-	bsp_reset_timer_loop(LL_TIMG0_T0);
+	bsp_reset_timer_loop(BSP_TIMER0);
 }
 
 void app_main(void)
@@ -51,12 +51,12 @@ void app_main(void)
 	printf("Registro config(default): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
 	
 	bsp_timer_config_t timer_struct_config = {
-		.bsp_timer = LL_TIMG0_T0,
+		.bsp_timer = BSP_TIMER0,
 		.bsp_freq_divider = 80,
-		.bsp_count_mode = LL_UP,
+		.bsp_count_mode = BSP_UP,
 		.bsp_alarm_enable = true,
 		.bsp_autoreload_enable = true,
-		.bsp_int_mode = LL_LEVEL,
+		.bsp_int_mode = BSP_LEVEL,
 		.bsp_alarm_value = 1000000,
 		.bsp_load_value = 0
 	};
@@ -109,7 +109,7 @@ void app_main(void)
     while(true){
 		if (webo){
 			webo = false;
-			printf("cambio en la funcion de clear\n");
+			printf("Ahora si puro BSP\n");
 		}
 		vTaskDelay(pdMS_TO_TICKS(250));
 	}

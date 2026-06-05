@@ -120,7 +120,17 @@ void bsp_RGB_led_toggle(int led);
  */ 
 bool bsp_pressed_button(int button);
 
-// ======================================================= TIMER ======================================================= 
+// ======================================================= TIMER =======================================================
+#define BSP_TIMER0 LL_TIMG0_T0
+#define BSP_TIMER1 LL_TIMG0_T1
+#define BSP_TIMER2 LL_TIMG1_T0
+#define BSP_TIMER3 LL_TIMG1_T1
+
+#define BSP_UP    LL_UP
+#define BSP_DOWN  LL_DOWN
+#define BSP_LEVEL LL_LEVEL
+#define BSP_EDGE  LL_EDGE
+ 
 /**
  * @brief structure for timer configuration
  * @details
