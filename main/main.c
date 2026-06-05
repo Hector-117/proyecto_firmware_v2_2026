@@ -24,6 +24,7 @@
 #define TIMGn_T0UPDATE_REG   (*((volatile uint32_t *)(0x3FF5F00C)))
 #define TIMGn_T0LO_REG       (*((volatile uint32_t *)(0x3FF5F004)))
 #define TIMGn_Tx_INT_RAW_REG (*((volatile uint32_t *)(0x3FF5F09C)))
+#define TIMGn_Tx_INT_CLR_REG (*((volatile uint32_t *)(0x3FF5F0A4)))
 
 /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
 void app_main(void)
@@ -106,7 +107,10 @@ void app_main(void)
 				    //Checar que no haya cambios en la configuracion
 					printf("Registro config(final): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
 				    TIMGn_T0UPDATE_REG = 1;
+				    //configurar la alarma
+					TIMG0_T0CONFIG_REG |= (1<<10); //awiwi quiere resetear eso el esp
 					printf("CNT=%" PRIu32 " RAW=%" PRIu32, TIMGn_T0LO_REG, TIMGn_Tx_INT_RAW_REG);
+					TIMGn_Tx_INT_CLR_REG = 1;
            			
 				}    	
 	    	vTaskDelay(pdMS_TO_TICKS(10));
