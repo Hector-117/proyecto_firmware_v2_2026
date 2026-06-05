@@ -58,7 +58,7 @@ void app_main(void)
 	TIMG0_T0CONFIG_REG |= (1<<12); //subir el edge
 	printf("Registro config(modo int): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
 	
-	TIMGn_T0ALARMLO_REG = 300000;
+	TIMGn_T0ALARMLO_REG = 30;
 	printf("Registro TIMGn_T0ALARMLO_REG: %" PRIx32 "\n", TIMGn_T0ALARMLO_REG);
 
 	TIMGn_T0ALARMHI_REG = 0;
@@ -103,13 +103,13 @@ void app_main(void)
 			//LL_SET_32BIT_REG(LL_TIMG0_T0UPDATE_REG,1);
 			if(TIMGn_Tx_INT_RAW_REG)
 				{
-					printf("===================================\n");
+					//printf("===================================\n");
 				    //Checar que no haya cambios en la configuracion
-					printf("Registro config(final): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
+					//printf("Registro config(final): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
 				    TIMGn_T0UPDATE_REG = 1;
 				    //configurar la alarma
 					TIMG0_T0CONFIG_REG |= (1<<10); //awiwi quiere resetear eso el esp
-					printf("CNT=%" PRIu32 " RAW=%" PRIu32, TIMGn_T0LO_REG, TIMGn_Tx_INT_RAW_REG);
+					//printf("CNT=%" PRIu32 " RAW=%" PRIu32, TIMGn_T0LO_REG, TIMGn_Tx_INT_RAW_REG);
 					TIMGn_Tx_INT_CLR_REG = 1;
            			
 				}    	
