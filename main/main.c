@@ -14,6 +14,7 @@
 #include "soc/timer_group_reg.h"
  
 #include "bsp_board.h"
+#include "hal.h"
 //#include "../components/timer_2026/include/timer_2026.h"
 #include <inttypes.h> // Required for PRIu32
 #include "driver/timer.h"
@@ -47,6 +48,7 @@ static void IRAM_ATTR timer_isr(void *arg)
 
 void app_main(void)
 {
+	hal_esp_init();
 	//Ver configuracion inicial del registro
 	printf("Registro config(default): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
 	
@@ -109,8 +111,21 @@ void app_main(void)
     while(true){
 		if (webo){
 			webo = false;
-			printf("Ahora si puro BSP\n");
+			printf("chistosito\n");
 		}
 		vTaskDelay(pdMS_TO_TICKS(250));
+		hal_status_vector(0x55);
+		hal_set_RGB_color(HAL_RED);
+		vTaskDelay(pdMS_TO_TICKS(500));
+		
+		hal_status_vector(0xAA);
+		vTaskDelay(pdMS_TO_TICKS(500));
+		hal_set_RGB_color(HAL_GREEN);
+		
+		hal_status_vector(0x55);
+		vTaskDelay(pdMS_TO_TICKS(500));
+		hal_set_RGB_color(HAL_BLUE);
+		
+		hal_status_vector(0xAA);
 	}
 }

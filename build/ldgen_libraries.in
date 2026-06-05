@@ -82,4 +82,5 @@ $<TARGET_FILE:__idf_wifi_provisioning>
 $<TARGET_FILE:__idf_main>
 $<TARGET_FILE:__idf_bsp_board>
 $<TARGET_FILE:__idf_gpio_2026>
+$<TARGET_FILE:__idf_hal_2026>
 $<TARGET_FILE:__idf_timer_2026>

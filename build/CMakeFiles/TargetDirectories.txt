@@ -831,6 +831,13 @@ C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build
 C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/gpio_2026/CMakeFiles/install.dir
 C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/gpio_2026/CMakeFiles/install/local.dir
 C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/gpio_2026/CMakeFiles/install/strip.dir
+C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/hal_2026/CMakeFiles/__idf_hal_2026.dir
+C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/hal_2026/CMakeFiles/edit_cache.dir
+C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/hal_2026/CMakeFiles/rebuild_cache.dir
+C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/hal_2026/CMakeFiles/list_install_components.dir
+C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/hal_2026/CMakeFiles/install.dir
+C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/hal_2026/CMakeFiles/install/local.dir
+C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/hal_2026/CMakeFiles/install/strip.dir
 C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/timer_2026/CMakeFiles/__idf_timer_2026.dir
 C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/timer_2026/CMakeFiles/edit_cache.dir
 C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/timer_2026/CMakeFiles/rebuild_cache.dir
