@@ -33,16 +33,22 @@
 #define TIMGn_Tx_INT_RAW_REG (*((volatile uint32_t *)(0x3FF5F09C)))
 #define TIMGn_Tx_INT_CLR_REG (*((volatile uint32_t *)(0x3FF5F0A4)))
 
+volatile bool webo = false;
 
 void function_boton1(void){
-	printf("boton 1: prueba luego de ajustar los cmakes\n");
+	printf("boton 1: presionado\n");
 }
 
 void function_boton2(void){
-	printf("boton 2: prueba luego de ajustar los cmakes\n");
+	printf("boton 2: presionado\n");
 }
 
-volatile bool webo = false;
+void function_callback(void){
+	//printf("hola dentro del callback\n");
+	webo = true;
+}
+
+//volatile bool webo = false;
 
 /*static void IRAM_ATTR timer_isr(void *arg)
 {
@@ -89,6 +95,7 @@ void app_main(void)
         &timer_handle
     );*/
 
+	hal_periodic_fun(3000000, function_callback);
     
     
     while(true){
@@ -112,7 +119,7 @@ void app_main(void)
 		
 		if (webo){
 			webo = false;
-			//printf("a ver si no la kgue\n");
+			printf("saludos desde la interrupcion\n");
 		}
 		vTaskDelay(pdMS_TO_TICKS(250));
 		/*hal_status_vector(0x55);

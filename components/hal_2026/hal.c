@@ -86,7 +86,7 @@ void hal_rising_edge(int button, hal_callback_t callback){
 
 
 
-/*static void IRAM_ATTR hal_timer_isr(void *arg)
+static void IRAM_ATTR hal_timer_isr(void *arg)
 {
     hal_callback_t periodic_func = arg;
 	periodic_func();
@@ -117,4 +117,4 @@ void hal_periodic_fun(int time_us, hal_callback_t callback){
         &hal_timer_handle
     );
 	
-}*/
+}
