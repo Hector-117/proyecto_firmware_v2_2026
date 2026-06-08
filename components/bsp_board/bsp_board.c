@@ -137,6 +137,14 @@ void bsp_update_last_btn_state(int button){
 	bsp_user_button_vector[bsp_button_Vector_Gpio_Map[button]].bsp_last_state = bsp_user_button_vector[bsp_button_Vector_Gpio_Map[button]].bsp_actual_state;
 }
 
+bool bsp_btn_get_actual_state(int button){
+	return bsp_user_button_vector[bsp_button_Vector_Gpio_Map[button]].bsp_actual_state;
+}
+
+bool bsp_btn_get_last_state(int button){
+	return bsp_user_button_vector[bsp_button_Vector_Gpio_Map[button]].bsp_last_state;
+}
+
 // ======================================================= TIMER ======================================================= 
 void bsp_timer_init(bsp_timer_config_t *timer_cfg)
 {

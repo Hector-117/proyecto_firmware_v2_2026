@@ -144,6 +144,20 @@ bool bsp_pressed_button(int button);
  */ 
 void bsp_update_last_btn_state(int button);
 
+/**
+ * @brief function to get the actual button state
+ * @param button the button desired to get his actual state.
+ * @return bool .bsp_actual_state button element structure
+ */ 
+bool bsp_btn_get_actual_state(int button);
+
+/**
+ * @brief function to get the last button state
+ * @param button the button desired to get his last state.
+ * @return bool .bsp_last_state button element structure
+ */ 
+bool bsp_btn_get_last_state(int button);
+
 // ======================================================= TIMER =======================================================
 #define BSP_TIMER0 LL_TIMG0_T0
 #define BSP_TIMER1 LL_TIMG0_T1

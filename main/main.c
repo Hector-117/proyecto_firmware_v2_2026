@@ -65,36 +65,11 @@ void app_main(void)
 	
 	bsp_timer_init(&timer_struct_config);
 	
-	//configurar no enable
-	//ll_timer_enable(LL_TIMG0_T0, false);
 	
-	//configurar modo divisor de frecuencia
-	//ll_set_freq_divider (LL_TIMG0_T0, 80);
-	
-	//configurar modo ascendente
-	//ll_timer_count_mode(LL_TIMG0_T0, LL_UP);
-	
-	//configurar la alarma
-	//ll_timer_alarm_enable(LL_TIMG0_T0, true);
-	
-	//configurar modo autoreload
-	//ll_timer_autoreload(LL_TIMG0_T0, true);
-	
-	//configurar modo de interrupcion
-	//ll_timer_int_mode(LL_TIMG0_T0,LL_LEVEL);
-	
-	//Finalmente habilitalo
-	//ll_timer_enable(LL_TIMG0_T0, true);
 	
 	printf("Registro config(enable activado): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
 	
 	
-	//Set alarm
-	//ll_set_alarm_value(LL_TIMG0_T0, 1000000);
-
-	//cargar el load
-	//ll_set_load_value(LL_TIMG0_T0, 0);
-	//ll_charge_load_value(LL_TIMG0_T0);
 	
 	printf("Registro TIMGn_T0LOAD_REG: %" PRIx32 "\n", TIMGn_T0LOAD_REG);
 
@@ -108,10 +83,25 @@ void app_main(void)
     );
 
     
+    
     while(true){
+		bsp_pressed_button(BSP_PUSH_BUTTON_0);
+		bsp_pressed_button(BSP_PUSH_BUTTON_1);
+		
+		if ((bsp_btn_get_actual_state(BSP_PUSH_BUTTON_0) == false) && (bsp_btn_get_last_state(BSP_PUSH_BUTTON_0) == true)){ //DETECCIÓN DE FALNCO DESCENDENTE EN PIN18
+			printf("Boton 1 presionado ikanaaaaaaiiiideeee\n");
+		}
+		bsp_update_last_btn_state(BSP_PUSH_BUTTON_0);
+
+		if ((bsp_btn_get_actual_state(BSP_PUSH_BUTTON_1) == false) && (bsp_btn_get_last_state(BSP_PUSH_BUTTON_1) == true)){ //DETECCIÓN DE FALNCO DESCENDENTE EN PIN18
+			printf("Boton 2 presionado or wo shi huan xu xie\n");
+		}
+		bsp_update_last_btn_state(BSP_PUSH_BUTTON_1);
+		
+		
 		if (webo){
 			webo = false;
-			printf("a ver si no la kgue\n");
+			//printf("a ver si no la kgue\n");
 		}
 		vTaskDelay(pdMS_TO_TICKS(250));
 		hal_status_vector(0x55);
