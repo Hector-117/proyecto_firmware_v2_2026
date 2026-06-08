@@ -16,6 +16,12 @@ typedef enum{
 } hal_color_t;
 
 
+/*typedef struct{
+	bool hal_actual_state;
+	bool hal_last_state;
+} hal_button_state_t;*/
+
+
 void hal_esp_init (void);
 void hal_status_vector(uint8_t vector_value);
 void hal_set_RGB_color(uint8_t vector_value);

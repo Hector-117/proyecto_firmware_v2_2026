@@ -51,6 +51,24 @@ typedef enum{
 	BSP_VECTOR_LEDBLUE = 2,
 } bsp_ivector_rgb_t;
 
+/**
+ * @brief enumerations for access vector button elements
+ */
+typedef enum{
+	BSP_VECTOR_BTN0 = 0,
+	BSP_VECTOR_BTN1 = 1,
+} bsp_ivector_button_t;
+
+/**
+ * @brief struct for vector button elements
+ * @details 
+ * Each element of vector has 2 components (bsp_actual_state & bsp_last_state)
+ */
+typedef struct{
+	bool bsp_actual_state;
+	bool bsp_last_state;
+} bsp_button_state_t;
+
 //  =============== Vector state of board leds =============== 
 /**
  * @brief get the value of the bit in vector led.
@@ -111,7 +129,6 @@ void bsp_RGB_off(int led);
  */ 
 void bsp_RGB_led_toggle(int led);
 
-
 // Abstraction for board buttons
 /**
  * @brief checks if a button is pressed.
@@ -119,6 +136,13 @@ void bsp_RGB_led_toggle(int led);
  * @return the button state
  */ 
 bool bsp_pressed_button(int button);
+
+/**
+ * @brief function to update the last button state
+ * @param button the button desired to store his last state.
+ * @brief this function stores actual state (bsp_actual_state) in last state (bsp_last_state)
+ */ 
+void bsp_update_last_btn_state(int button);
 
 // ======================================================= TIMER =======================================================
 #define BSP_TIMER0 LL_TIMG0_T0

@@ -111,7 +111,7 @@ void app_main(void)
     while(true){
 		if (webo){
 			webo = false;
-			printf("chistosito\n");
+			printf("a ver si no la kgue\n");
 		}
 		vTaskDelay(pdMS_TO_TICKS(250));
 		hal_status_vector(0x55);

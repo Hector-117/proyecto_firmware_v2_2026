@@ -16,6 +16,19 @@
 static uint8_t bsp_led_vector = 0;
 static uint8_t bsp_rgb_vector = 0;
 
+bsp_button_state_t bsp_user_button_vector [2] = {
+	[BSP_VECTOR_BTN0] = {true, true},
+	[BSP_VECTOR_BTN1] = {true, true}
+};
+
+/**
+ * @brief array for mapping GPIO number with bit position in Vector button
+ */
+uint32_t bsp_button_Vector_Gpio_Map [] = {
+	[LL_GPIO18]  = BSP_VECTOR_BTN0,
+	[LL_GPIO19]  = BSP_VECTOR_BTN1
+};
+
 /**
  * @brief array for mapping GPIO number with bit position in Vector led
  */
@@ -115,9 +128,14 @@ void bsp_RGB_led_toggle(int led){
 }
 
 bool bsp_pressed_button(int button){
-	return (ll_gpio_read(button) == 1);
+	bool button_state = (ll_gpio_read(button) == 1);
+	bsp_user_button_vector[bsp_button_Vector_Gpio_Map[button]].bsp_actual_state = button_state;
+	return (button_state);
 }
 
+void bsp_update_last_btn_state(int button){
+	bsp_user_button_vector[bsp_button_Vector_Gpio_Map[button]].bsp_last_state = bsp_user_button_vector[bsp_button_Vector_Gpio_Map[button]].bsp_actual_state;
+}
 
 // ======================================================= TIMER ======================================================= 
 void bsp_timer_init(bsp_timer_config_t *timer_cfg)
