@@ -16,6 +16,10 @@
 
 //# include "../../bsp_board/include/bsp_board.h"
 # include "bsp_board.h"
+
+#define HAL_USER_BTN0 BSP_PUSH_BUTTON_0
+#define HAL_USER_BTN1 BSP_PUSH_BUTTON_1
+
 /**
  * @brief enumerations for define RGB color
  * @details this constants are intended to be plugged in hal_set_RGB_color() as argument

@@ -12,12 +12,9 @@
  */
 #include "soc/timer_group_struct.h"
 #include "soc/timer_group_reg.h"
- 
 #include "bsp_board.h"
 #include "hal.h"
-//#include "../components/timer_2026/include/timer_2026.h"
 #include <inttypes.h> // Required for PRIu32
-#include "driver/timer.h"
 #include "esp_intr_alloc.h"
 
 
@@ -113,13 +110,13 @@ void app_main(void)
 		bsp_update_last_btn_state(BSP_PUSH_BUTTON_1);*/
 		
 		
-		hal_rising_edge(BSP_PUSH_BUTTON_0, function_boton1);
+		hal_rising_edge(HAL_USER_BTN0, function_boton1);
 		
-		hal_falling_edge(BSP_PUSH_BUTTON_1, function_boton2);
+		hal_falling_edge(HAL_USER_BTN1, function_boton2);
 		
 		if (webo){
 			webo = false;
-			printf("saludos desde la interrupcion\n");
+			printf("prueba sencillita\n");
 		}
 		vTaskDelay(pdMS_TO_TICKS(250));
 		/*hal_status_vector(0x55);
