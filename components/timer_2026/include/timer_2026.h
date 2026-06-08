@@ -21,7 +21,7 @@
 #define LLT_HWREG32(x)        (*((volatile uint32_t *)(x)))
 #define LLT_HW_PTR_REG32(x)   ((volatile uint32_t *)(x))
 
-#define LL_ADVANCED_PERIPHERAL_BUS_CLK_FREQ 80
+#define LL_ADVANCED_PERIPHERAL_BUS_CLK_FREQ 80 //80MHz
 /**
  * @brief advanced pheripheral bus clock frequency
  * 

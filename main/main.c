@@ -35,23 +35,23 @@
 
 
 void function_boton1(void){
-	printf("Boton 1 presionado: chequeo luego de comentar\n");
+	printf("Compilando de prueba a ver si le atine\n");
 }
 
 void function_boton2(void){
-	printf("Boton 2 presionado: chequeo luego de comentar\n");
+	printf("o a ver si no la kague\n");
 }
 
 volatile bool webo = false;
 
-static intr_handle_t timer_handle;
-
-static void IRAM_ATTR timer_isr(void *arg)
+/*static void IRAM_ATTR timer_isr(void *arg)
 {
     webo = true;
 
 	bsp_reset_timer_loop(BSP_TIMER0);
-}
+}*/
+
+//static intr_handle_t timer_handle;
 
 void app_main(void)
 {
@@ -59,7 +59,7 @@ void app_main(void)
 	//Ver configuracion inicial del registro
 	printf("Registro config(default): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
 	
-	bsp_timer_config_t timer_struct_config = {
+	/*bsp_timer_config_t timer_struct_config = {
 		.bsp_timer = BSP_TIMER0,
 		.bsp_freq_divider = 80,
 		.bsp_count_mode = BSP_UP,
@@ -68,9 +68,9 @@ void app_main(void)
 		.bsp_int_mode = BSP_LEVEL,
 		.bsp_alarm_value = 1000000,
 		.bsp_load_value = 0
-	};
+	};*/
 	
-	bsp_timer_init(&timer_struct_config);
+	//bsp_timer_init(&timer_struct_config);
 	
 	
 	
@@ -81,13 +81,13 @@ void app_main(void)
 	printf("Registro TIMGn_T0LOAD_REG: %" PRIx32 "\n", TIMGn_T0LOAD_REG);
 
 
-    esp_intr_alloc(
+    /*esp_intr_alloc(
         ETS_TG0_T0_LEVEL_INTR_SOURCE,
         ESP_INTR_FLAG_IRAM,
         timer_isr,
         NULL,
         &timer_handle
-    );
+    );*/
 
     
     

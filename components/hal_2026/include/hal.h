@@ -74,5 +74,8 @@ void hal_status_vector(uint8_t vector_value);
  * @note is easier to set a color value using hal_color_t enumerations
  */
 void hal_set_RGB_color(uint8_t vector_value);
+
+
+//void hal_periodic_fun(int time_us, hal_callback_t callback);
 #endif
 

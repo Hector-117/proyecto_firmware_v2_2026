@@ -83,3 +83,38 @@ void hal_rising_edge(int button, hal_callback_t callback){
 	
 	bsp_update_last_btn_state(button);
 }
+
+
+
+/*static void IRAM_ATTR hal_timer_isr(void *arg)
+{
+    hal_callback_t periodic_func = arg;
+	periodic_func();
+	bsp_reset_timer_loop(BSP_TIMER0);
+}
+
+static intr_handle_t hal_timer_handle;
+
+void hal_periodic_fun(int time_us, hal_callback_t callback){
+	bsp_timer_config_t timer_struct_config = {
+		.bsp_timer = BSP_TIMER0,
+		.bsp_freq_divider = 80,
+		.bsp_count_mode = BSP_UP,
+		.bsp_alarm_enable = true,
+		.bsp_autoreload_enable = true,
+		.bsp_int_mode = BSP_LEVEL,
+		.bsp_alarm_value = time_us,
+		.bsp_load_value = 0
+	};
+	
+	bsp_timer_init(&timer_struct_config);
+	
+	esp_intr_alloc(
+        ETS_TG0_T0_LEVEL_INTR_SOURCE,
+        ESP_INTR_FLAG_IRAM,
+        hal_timer_isr,
+        callback,
+        &hal_timer_handle
+    );
+	
+}*/
