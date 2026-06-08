@@ -21,6 +21,9 @@ typedef enum{
 	bool hal_last_state;
 } hal_button_state_t;*/
 
+typedef void (*hal_callback_t)(void);
+
+void hal_falling_edge(int button, hal_callback_t callback);
 
 void hal_esp_init (void);
 void hal_status_vector(uint8_t vector_value);

@@ -18,19 +18,6 @@ uint32_t hal_vector_rgb [] = {
 	BSP_RGB_BLUELED
 };
 
-
-/*
-hal_button_state hal_user_button_1 = {
-	.hal_actual_state = true,
-	.hal_last_state = true
-};
-
-hal_button_state hal_user_button_2 = {
-	.hal_actual_state = true,
-	.hal_last_state = true
-};
-*/
-
 void hal_esp_init (void){
 	bsp_init();
 }
@@ -61,8 +48,12 @@ void hal_set_RGB_color(uint8_t vector_value){
 	}
 }
 
-
-
-/*void hal_rising_edge(hal_button_state button){
-	button.hal_actual_state = bsp_pressed_button()
-}*/
+void hal_falling_edge(int button, hal_callback_t callback){
+	bsp_pressed_button(button);
+	
+	if ((bsp_btn_get_actual_state(button) == false) && (bsp_btn_get_last_state(button) == true)){
+			callback();
+	}
+	
+	bsp_update_last_btn_state(button);
+}

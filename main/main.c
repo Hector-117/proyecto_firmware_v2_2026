@@ -34,6 +34,13 @@
 #define TIMGn_Tx_INT_CLR_REG (*((volatile uint32_t *)(0x3FF5F0A4)))
 
 
+void function_boton1(void){
+	printf("Boton 1 presionado callback\n");
+}
+
+void function_boton2(void){
+	printf("Boton 2 presionado callback\n");
+}
 
 volatile bool webo = false;
 
@@ -85,7 +92,7 @@ void app_main(void)
     
     
     while(true){
-		bsp_pressed_button(BSP_PUSH_BUTTON_0);
+		/*bsp_pressed_button(BSP_PUSH_BUTTON_0);
 		bsp_pressed_button(BSP_PUSH_BUTTON_1);
 		
 		if ((bsp_btn_get_actual_state(BSP_PUSH_BUTTON_0) == false) && (bsp_btn_get_last_state(BSP_PUSH_BUTTON_0) == true)){ //DETECCIÓN DE FALNCO DESCENDENTE EN PIN18
@@ -96,15 +103,19 @@ void app_main(void)
 		if ((bsp_btn_get_actual_state(BSP_PUSH_BUTTON_1) == false) && (bsp_btn_get_last_state(BSP_PUSH_BUTTON_1) == true)){ //DETECCIÓN DE FALNCO DESCENDENTE EN PIN18
 			printf("Boton 2 presionado or wo shi huan xu xie\n");
 		}
-		bsp_update_last_btn_state(BSP_PUSH_BUTTON_1);
+		bsp_update_last_btn_state(BSP_PUSH_BUTTON_1);*/
 		
+		
+		hal_falling_edge(BSP_PUSH_BUTTON_0, function_boton1);
+		
+		hal_falling_edge(BSP_PUSH_BUTTON_1, function_boton2);
 		
 		if (webo){
 			webo = false;
 			//printf("a ver si no la kgue\n");
 		}
 		vTaskDelay(pdMS_TO_TICKS(250));
-		hal_status_vector(0x55);
+		/*hal_status_vector(0x55);
 		hal_set_RGB_color(HAL_RED);
 		vTaskDelay(pdMS_TO_TICKS(500));
 		
@@ -116,6 +127,6 @@ void app_main(void)
 		vTaskDelay(pdMS_TO_TICKS(500));
 		hal_set_RGB_color(HAL_BLUE);
 		
-		hal_status_vector(0xAA);
+		hal_status_vector(0xAA);*/
 	}
 }
