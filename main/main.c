@@ -17,120 +17,152 @@
 #include <inttypes.h> // Required for PRIu32
 #include "esp_intr_alloc.h"
 
+void fase_presentacion();
+void rgb_logic();
 
-//Para los registros miados
-#define TIMG0_T0CONFIG_REG   (*((volatile uint32_t *)(0x3FF5F000)))
-#define TIMGn_T0ALARMLO_REG  (*((volatile uint32_t *)(0x3FF5F010)))
-#define TIMGn_T0ALARMHI_REG  (*((volatile uint32_t *)(0x3FF5F014)))
-#define TIMGn_T0LOADLO_REG   (*((volatile uint32_t *)(0x3FF5F018)))
-#define TIMGn_T0LOADHI_REG   (*((volatile uint32_t *)(0x3FF5F01C)))
-#define TIMGn_T0LOAD_REG     (*((volatile uint32_t *)(0x3FF5F020)))
-#define TIMGn_T0UPDATE_REG   (*((volatile uint32_t *)(0x3FF5F00C)))
-#define TIMGn_T0LO_REG       (*((volatile uint32_t *)(0x3FF5F004)))
-#define TIMGn_Tx_INT_RAW_REG (*((volatile uint32_t *)(0x3FF5F09C)))
-#define TIMGn_Tx_INT_CLR_REG (*((volatile uint32_t *)(0x3FF5F0A4)))
+int contador_pulsaciones;
+int count_pulse_btn1;
+int count_pulse_btn2;
 
-volatile bool webo = false;
+int div_freq;
+
+bool aux1 = true;
+bool aux2 = true;
+bool aux3 = true;
+bool aux4 = true;
+bool aux5 = true;
+bool aux6 = true;
+bool aux7 = true;
+
+volatile bool flag = false;
 
 void function_boton1(void){
-	printf("boton 1: presionado\n");
+	count_pulse_btn1++;
 }
 
 void function_boton2(void){
-	printf("boton 2: presionado\n");
+	count_pulse_btn2++;
 }
 
 void function_callback(void){
-	//printf("hola dentro del callback\n");
-	webo = true;
+	flag = true;
 }
 
-//volatile bool webo = false;
-
-/*static void IRAM_ATTR timer_isr(void *arg)
-{
-    webo = true;
-
-	bsp_reset_timer_loop(BSP_TIMER0);
-}*/
-
-//static intr_handle_t timer_handle;
+int btn1, btn2;
 
 void app_main(void)
 {
 	hal_esp_init();
-	//Ver configuracion inicial del registro
-	printf("Registro config(default): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
-	
-	/*bsp_timer_config_t timer_struct_config = {
-		.bsp_timer = BSP_TIMER0,
-		.bsp_freq_divider = 80,
-		.bsp_count_mode = BSP_UP,
-		.bsp_alarm_enable = true,
-		.bsp_autoreload_enable = true,
-		.bsp_int_mode = BSP_LEVEL,
-		.bsp_alarm_value = 1000000,
-		.bsp_load_value = 0
-	};*/
-	
-	//bsp_timer_init(&timer_struct_config);
-	
-	
-	
-	printf("Registro config(enable activado): %" PRIx32 "\n", TIMG0_T0CONFIG_REG);
-	
-	
-	
-	printf("Registro TIMGn_T0LOAD_REG: %" PRIx32 "\n", TIMGn_T0LOAD_REG);
+	hal_set_RGB_color(HAL_BLACK);
 
-
-    /*esp_intr_alloc(
-        ETS_TG0_T0_LEVEL_INTR_SOURCE,
-        ESP_INTR_FLAG_IRAM,
-        timer_isr,
-        NULL,
-        &timer_handle
-    );*/
-
-	hal_periodic_fun(3000000, function_callback);
-    
+	hal_periodic_fun(250000, function_callback);
     
     while(true){
-		/*bsp_pressed_button(BSP_PUSH_BUTTON_0);
-		bsp_pressed_button(BSP_PUSH_BUTTON_1);
-		
-		if ((bsp_btn_get_actual_state(BSP_PUSH_BUTTON_0) == false) && (bsp_btn_get_last_state(BSP_PUSH_BUTTON_0) == true)){ //DETECCIÓN DE FALNCO DESCENDENTE EN PIN18
-			printf("Boton 1 presionado ikanaaaaaaiiiideeee\n");
-		}
-		bsp_update_last_btn_state(BSP_PUSH_BUTTON_0);
-
-		if ((bsp_btn_get_actual_state(BSP_PUSH_BUTTON_1) == false) && (bsp_btn_get_last_state(BSP_PUSH_BUTTON_1) == true)){ //DETECCIÓN DE FALNCO DESCENDENTE EN PIN18
-			printf("Boton 2 presionado or wo shi huan xu xie\n");
-		}
-		bsp_update_last_btn_state(BSP_PUSH_BUTTON_1);*/
-		
-		
-		hal_rising_edge(HAL_USER_BTN0, function_boton1);
-		
+		hal_falling_edge(HAL_USER_BTN0, function_boton1);
 		hal_falling_edge(HAL_USER_BTN1, function_boton2);
+		printf("btn1 fuera = %d\n", hal_btn_get_actual_state(HAL_USER_BTN0));
+		printf("btn2 fuera = %d\n", hal_btn_get_actual_state(HAL_USER_BTN1));
+		contador_pulsaciones = count_pulse_btn1 + count_pulse_btn2;
 		
-		if (webo){
-			webo = false;
-			printf("prueba sencillita\n");
+		switch (contador_pulsaciones){
+			case 0:
+				fase_presentacion();
+				break;
+			case 1:
+				if (aux6){
+					aux6 = false;
+					printf("\nSistema iniciado... \n");
+				}
+				
+				if (flag){
+					flag = false;
+					div_freq++;
+					
+					if (div_freq % 2){
+						if (aux7){
+							aux7 = false;
+							hal_status_vector(0x55);
+						} else{
+							hal_toggle_status_vector();	
+						}
+					}
+				}
+				break;
+			default:
+				hal_toggle_status_vector();
+				rgb_logic();
 		}
+		
 		vTaskDelay(pdMS_TO_TICKS(250));
-		/*hal_status_vector(0x55);
-		hal_set_RGB_color(HAL_RED);
-		vTaskDelay(pdMS_TO_TICKS(500));
-		
-		hal_status_vector(0xAA);
-		vTaskDelay(pdMS_TO_TICKS(500));
-		hal_set_RGB_color(HAL_GREEN);
-		
-		hal_status_vector(0x55);
-		vTaskDelay(pdMS_TO_TICKS(500));
-		hal_set_RGB_color(HAL_BLUE);
-		
-		hal_status_vector(0xAA);*/
 	}
+}
+
+
+void fase_presentacion(){	
+	if(aux1){
+		aux1 = false;
+		printf(	"================================================================================\n"
+		   		"		Bienvenido a Proyecto Firmware Ene-jun 2026\n"
+		   		"================================================================================\n"
+		   		"   Integrantes:\n"
+		  		"	* Hector Said Herrera Nino: 22061074\n"
+		  		"   * Jose Francisco Padilla Torres: 21061044\n"
+		   		"	Materia: Software Embebido\n\n"
+		   		"________________________________________________________________________________\n"
+		   		"		Instrucciones de operacion\n"
+		   		"________________________________________________________________________________\n"
+		   		"Para iniciar el sistema debe pulsar cualquier boton\n"
+		   		"	a) Si se presiona dos veces el boton 1, el led de color RGB se pone violeta e imprime el estado del led RGB por terminal.\n"
+		   		"	b) Si se presiona una vez el boton 2, el led de color se pone azul e imprime el estado del led RGB por terminal.\n"
+		  		"	c) Si se presiona dos veces el boton 2, el led de color se pone amarillo e imprime el estado del led RGB por terminal.\n"
+		   		"	Si se presiona cualquiera de los dos botones por tercera vez se imprime -Reinciando sistema-, y el algoritmo volvera a empezar.\n"
+		   		"________________________________________________________________________________\n"
+		   		"presione cualquier boton para iniciar...\n"
+				);
+	}
+}
+
+void rgb_logic(){
+	if (aux5){
+		aux5 = false;
+		printf("btn1 = %d\n", hal_btn_get_actual_state(HAL_USER_BTN0));
+		printf("btn2 = %d\n", hal_btn_get_actual_state(HAL_USER_BTN1));
+		count_pulse_btn1 = (!hal_btn_get_actual_state(HAL_USER_BTN0)) ? 2 : 1;
+		count_pulse_btn2 = (!hal_btn_get_actual_state(HAL_USER_BTN1)) ? 2 : 1;
+		//printf("btn1 = %d\n", count_pulse_btn1);
+		//printf("btn2 = %d\n", count_pulse_btn2);
+	}
+	
+	if ((count_pulse_btn1 == 4) || (count_pulse_btn2 == 4)){
+		printf("\nReiniciando sistema\n\n");
+		hal_status_vector(0x00);
+		hal_set_RGB_color(HAL_BLACK);
+		contador_pulsaciones = 0;
+		count_pulse_btn1 = 0;
+		count_pulse_btn2 = 0;
+		aux1 = true;
+		aux2 = true;
+		aux3 = true;
+		aux4 = true;
+		aux5 = true;
+		aux6 = true;
+		aux7 = true;	
+	}
+	
+	else if ((count_pulse_btn1) == 3 && aux2){ //Color violeta
+		aux2 = false;
+		printf("Color violeta\n");
+		hal_set_RGB_color(HAL_MAGENTA);
+	}
+	else if ((count_pulse_btn2) == 2 && aux3){ //Color azul
+		aux3 = false;
+		printf("Color azul\n");
+		hal_set_RGB_color(HAL_BLUE);
+	}
+	else if((count_pulse_btn2) == 3 && aux4){ //Color amarillo
+		aux4 = false;
+		printf("Color amarillo\n");
+		hal_set_RGB_color(HAL_YELLOW);
+	}
+	
 }

@@ -80,6 +80,9 @@ void hal_status_vector(uint8_t vector_value);
  */
 void hal_set_RGB_color(uint8_t vector_value);
 
+void hal_toggle_status_vector();
+bool hal_btn_get_actual_state(int button);
+
 /**
  * @brief function to call a callback periodically
  * @param time_us time period when the callback will be called

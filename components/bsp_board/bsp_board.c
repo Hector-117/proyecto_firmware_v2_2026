@@ -99,12 +99,12 @@ bool bsp_get_bit_vector_RGB(uint8_t bit){
 
 void bsp_led_on(int led){
 	ll_gpio_write(led, true);
-	bsp_led_vector |= (1<<led);
+	bsp_led_vector |= (1<<bsp_led_Vector_Gpio_Map[led]);
 }
 
 void bsp_led_off(int led){
 	ll_gpio_write(led, false);
-	bsp_led_vector &= ~(1<<led);
+	bsp_led_vector &= ~(1<<bsp_led_Vector_Gpio_Map[led]);
 }
 
 void bsp_led_toggle(int led){

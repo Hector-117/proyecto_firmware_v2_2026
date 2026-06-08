@@ -64,6 +64,16 @@ void hal_set_RGB_color(uint8_t vector_value){
 	}
 }
 
+void hal_toggle_status_vector(){
+	for(int i = 0; i < 5; i++){
+		bsp_led_toggle(hal_vector_leds[i]);
+	}
+}
+
+bool hal_btn_get_actual_state(int button){
+	return bsp_btn_get_actual_state(button);
+}
+
 void hal_falling_edge(int button, hal_callback_t callback){
 	bsp_pressed_button(button);
 	
