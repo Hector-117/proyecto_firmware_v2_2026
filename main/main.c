@@ -35,11 +35,11 @@
 
 
 void function_boton1(void){
-	printf("Compilando de prueba a ver si le atine\n");
+	printf("boton 1: prueba luego de ajustar los cmakes\n");
 }
 
 void function_boton2(void){
-	printf("o a ver si no la kague\n");
+	printf("boton 2: prueba luego de ajustar los cmakes\n");
 }
 
 volatile bool webo = false;

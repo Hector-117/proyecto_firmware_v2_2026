@@ -13,8 +13,11 @@
 #ifndef BSP_BOARD_H
 #define BSP_BOARD_H
 
-#include "../../gpio_2026/include/gpio_2026.h"
-#include "../../timer_2026/include/timer_2026.h"
+//#include "../../gpio_2026/include/gpio_2026.h"
+//#include "../../timer_2026/include/timer_2026.h"
+
+#include "gpio_2026.h"
+#include "timer_2026.h"
 
 // ======================================================= GPIO ======================================================= 
 // =============== Name abstraction for board =============== 

@@ -14,7 +14,8 @@
 #ifndef HAL_2026
 #define HAL_2026
 
-# include "../../bsp_board/include/bsp_board.h"
+//# include "../../bsp_board/include/bsp_board.h"
+# include "bsp_board.h"
 /**
  * @brief enumerations for define RGB color
  * @details this constants are intended to be plugged in hal_set_RGB_color() as argument

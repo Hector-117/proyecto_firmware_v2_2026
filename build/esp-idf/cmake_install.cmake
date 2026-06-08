@@ -544,21 +544,21 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/bsp_board/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
   include("C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/gpio_2026/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/hal_2026/cmake_install.cmake")
+  include("C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/timer_2026/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/timer_2026/cmake_install.cmake")
+  include("C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/bsp_board/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build/esp-idf/hal_2026/cmake_install.cmake")
 endif()
 
