@@ -35,11 +35,11 @@
 
 
 void function_boton1(void){
-	printf("Boton 1 presionado callback\n");
+	printf("Boton 1 presionado callback_rising\n");
 }
 
 void function_boton2(void){
-	printf("Boton 2 presionado callback\n");
+	printf("Boton 2 presionado callback_falling\n");
 }
 
 volatile bool webo = false;
@@ -106,7 +106,7 @@ void app_main(void)
 		bsp_update_last_btn_state(BSP_PUSH_BUTTON_1);*/
 		
 		
-		hal_falling_edge(BSP_PUSH_BUTTON_0, function_boton1);
+		hal_rising_edge(BSP_PUSH_BUTTON_0, function_boton1);
 		
 		hal_falling_edge(BSP_PUSH_BUTTON_1, function_boton2);
 		

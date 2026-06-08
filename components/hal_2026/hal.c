@@ -57,3 +57,13 @@ void hal_falling_edge(int button, hal_callback_t callback){
 	
 	bsp_update_last_btn_state(button);
 }
+
+void hal_rising_edge(int button, hal_callback_t callback){
+	bsp_pressed_button(button);
+	
+	if ((bsp_btn_get_actual_state(button) == true) && (bsp_btn_get_last_state(button) == false)){
+			callback();
+	}
+	
+	bsp_update_last_btn_state(button);
+}
