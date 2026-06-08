@@ -1,8 +1,20 @@
+/**
+ * @file hal.c
+ * @brief Hardware Abstraction Layer (HAL) source file for ESP32.
+ *
+ * @details
+ * This file contains functions implementation, and arrays for iterate through vectors
+ * for implementing abstract functionality of board elements.
+ *
+ * @author Hector Said Herrera Niño
+ * @author José Francisco Padilla Torres
+ * @date 2026-06-07
+ */
 #include <stdio.h>
 #include "hal.h"
 
 /**
- * @brief array for iterate through all LEDS and configure in bsp_init
+ * @brief array for iterate through all LEDS vector
  */
 uint32_t hal_vector_leds [] = {
 	BSP_LED0,
@@ -12,6 +24,9 @@ uint32_t hal_vector_leds [] = {
 	BSP_LED4,
 };
 
+/**
+ * @brief array for iterate through all RGB LEDS vector
+ */
 uint32_t hal_vector_rgb [] = {
 	BSP_RGB_REDLED,
 	BSP_RGB_GREENLED,
@@ -22,8 +37,9 @@ void hal_esp_init (void){
 	bsp_init();
 }
 
-//(bsp_led_vector & (1<<bit)) != 0
-
+/**
+ * @brief generic macro functions that returns bool value of desired bit position
+ */
 #define HAL_GET_BIT_VECTOR(x,bit) ((x & (1<<bit)) != 0)
 
 void hal_status_vector(uint8_t vector_value){

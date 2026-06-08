@@ -35,11 +35,11 @@
 
 
 void function_boton1(void){
-	printf("Boton 1 presionado callback_rising\n");
+	printf("Boton 1 presionado: chequeo luego de comentar\n");
 }
 
 void function_boton2(void){
-	printf("Boton 2 presionado callback_falling\n");
+	printf("Boton 2 presionado: chequeo luego de comentar\n");
 }
 
 volatile bool webo = false;

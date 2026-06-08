@@ -1,9 +1,24 @@
+/**
+ * @file hal.h
+ * @brief Hardware Abstraction Layer (HAL) header file for ESP32.
+ *
+ * @details
+ * This file contains function, enums, and typdef pointer callback declaration for 
+ * expose abstract functionality of board elements.
+ *
+ * @author Hector Said Herrera Niño
+ * @author José Francisco Padilla Torres
+ * @date 2026-06-07
+ */
+
 #ifndef HAL_2026
 #define HAL_2026
 
 # include "../../bsp_board/include/bsp_board.h"
-/************ HAL init ************/
-
+/**
+ * @brief enumerations for define RGB color
+ * @details this constants are intended to be plugged in hal_set_RGB_color() as argument
+ */
 typedef enum{
 	HAL_WHITE	= 0,
 	HAL_CYAN 	= 1,
@@ -15,13 +30,49 @@ typedef enum{
 	HAL_BLACK	= 7
 } hal_color_t;
 
+/**
+ * @brief Initialize the boards components.
+ */
+void hal_esp_init (void);
+
+/**
+ * @brief typedef pointer to function
+ * @details this typedef is for a pointer to function that return void and has as parameter void.
+ * this is used for callbacks in hal_falling_edge() & hal_rising_edge() functions
+ */
 typedef void (*hal_callback_t)(void);
 
+/**
+ * @brief excecutes callback when detects falling edge
+ * @param button the button which is gonna be detected the falling edge
+ * @param callback function that will be excecuted when falling edge is detected
+ */
 void hal_falling_edge(int button, hal_callback_t callback);
+
+/**
+ * @brief excecutes callback when detects rising edge
+ * @param button the button which is gonna be detected the rising edge
+ * @param callback function that will be excecuted when rising edge is detected
+ */
 void hal_rising_edge(int button, hal_callback_t callback);
 
-void hal_esp_init (void);
+/**
+ * @brief Writes a value on the status vector
+ * @param vector_value the value in hexadecimal
+ * @details 
+ * The function receives 8 bits, but only takes the first 5 less significant
+ * bits, and it will turn on when bit value is 1, and turn off when bit value is 0
+ */
 void hal_status_vector(uint8_t vector_value);
+
+/**
+ * @brief Writes a value on the RGB led
+ * @param vector_value the value in hexadecimal
+ * @details
+ * The function receives 8 bits, but only takes the first 3 less significant bits.
+ * it will turn on the led when bit value is 1, and turn off when bit value is 0.
+ * @note is easier to set a color value using hal_color_t enumerations
+ */
 void hal_set_RGB_color(uint8_t vector_value);
 #endif
 
