@@ -76,7 +76,15 @@ void hal_status_vector(uint8_t vector_value);
  */
 void hal_set_RGB_color(uint8_t vector_value);
 
-
+/**
+ * @brief function to call a callback periodically
+ * @param time_us time period when the callback will be called
+ * @param callback function pointer to callback
+ * @details
+ * This function configure timer and isr. always will configure for:
+ * module 0 timer 0.
+ * @note the callback is void return and void arguments
+ */
 void hal_periodic_fun(int time_us, hal_callback_t callback);
 #endif
 

@@ -85,7 +85,13 @@ void hal_rising_edge(int button, hal_callback_t callback){
 }
 
 
-
+/**
+ * @brief callback that the timer alarm will call
+ * @param arg void pointer to the main.c callback
+ * @details 
+ * The timer alarm will call hal_timer_isr, and this isr will call
+ * the callback defined by user and send as argument in hal_periodic_fun()
+ */
 static void IRAM_ATTR hal_timer_isr(void *arg)
 {
     hal_callback_t periodic_func = arg;
@@ -93,6 +99,9 @@ static void IRAM_ATTR hal_timer_isr(void *arg)
 	bsp_reset_timer_loop(BSP_TIMER0);
 }
 
+/**
+ * @brief handler for interruption. esp_intr_alloc() need it.
+ */
 static intr_handle_t hal_timer_handle;
 
 void hal_periodic_fun(int time_us, hal_callback_t callback){
