@@ -261,6 +261,7 @@ static intr_handle_t hal_delay_handle;
  */
 bool loop_onetime = true;
 void hal_delay(int time_us){
+	alarm_delay = false;
 	if (loop_onetime){
 		loop_onetime = false;
 		

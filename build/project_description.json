@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "app-template",
-    "project_version":    "0b02617-dirty",
+    "project_version":    "b7582ec-dirty",
     "project_path":       "C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3",
     "idf_path":           "D:/Espressif/frameworks/esp-idf-v5.3.1",
     "build_dir":          "C:/Users/Hecto/OneDrive/Documents/ESCUELA/Espressif_SE/Proyecto_Firware_V3/build",

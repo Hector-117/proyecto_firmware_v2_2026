@@ -14,10 +14,10 @@
  */
  
 #include <stdio.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <stdbool.h>
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
+//#include <freertos/FreeRTOS.h>
+//#include <freertos/task.h>
 
 
 /**
@@ -40,7 +40,6 @@
 /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\MACROFUNCIONES PARA ACCESO A REGISTROS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
 
 /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\GPIO ENABLE 0-31 REGISTERS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
-#define LL_GPIO_ENABLE 	(LL_HWREG32(0x3FF44020))
 /**
  * @brief GPIO enable as output register (0 to 31)
  *
@@ -51,8 +50,9 @@
  * GPIO_ENABLE_REG (0x3FF44020) with this register you can enable as output the GPIO 0 to 31
  * @note Page 63.
  */
+#define LL_GPIO_ENABLE 	(LL_HWREG32(0x3FF44020))
 
-#define LL_GPIO_ENABLE_W1TS 	(LL_HWREG32(0x3FF44024)) // Registro para encender (SET) GPIO 0-31 output
+
 /**
  * @brief GPIO enable W1TS register (0 to 31)
  *
@@ -65,10 +65,10 @@
  * Every bit 1 written here will be set 1 in GPIO_ENABLE_REG
  * @note Page 64.
  */
+#define LL_GPIO_ENABLE_W1TS 	(LL_HWREG32(0x3FF44024)) // Registro para encender (SET) GPIO 0-31 output
 #define LL_SET_BIT_GPIO_ENABLE_W1TS(x)	 (LL_GPIO_ENABLE_W1TS = (1<<(x)))
 
 
-#define LL_GPIO_ENABLE_W1TC 	(LL_HWREG32(0x3FF44028)) // Registro para encender (SET) GPIO 0-31 output
 /**
  * @brief GPIO enable W1TC register (0 to 31)
  *
@@ -81,11 +81,11 @@
  * For every bit 1 written here, will be cleared in GPIO_ENABLE_REG
  * @note Page 64.
  */
+#define LL_GPIO_ENABLE_W1TC 	(LL_HWREG32(0x3FF44028)) // Registro para encender (SET) GPIO 0-31 output
 #define LL_CLEAR_BIT_GPIO_ENABLE_W1TC(x)	(LL_GPIO_ENABLE_W1TC = (1<<(x)))
 
 
 /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\GPIO ENABLE 32-39 REGISTERS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
-#define LL_GPIO_ENABLE1	(LL_HWREG32(0x3FF4402C)) // Registros para leer entradas en gios 32-39
 /**
  * @brief GPIO enable as output register (32 to 39)
  *
@@ -96,8 +96,9 @@
  * GPIO_ENABLE1_REG (0x3FF4402C) with this register you can enable as output the GPIO 32 to 39
  * @note Page 64.
  */
+#define LL_GPIO_ENABLE1	(LL_HWREG32(0x3FF4402C)) // Registros para leer entradas en gios 32-39
 
-#define  LL_GPIO_ENABLE1_W1TS	(LL_HWREG32(0x3FF44030)) // Registros para leer entradas en gios 32-39
+
 /**
  * @brief GPIO enable W1TS register (32 to 39)
  *
@@ -110,10 +111,10 @@
  * Every bit 1 written here will be set 1 GPIO_ENABLE1_REG
  * @note Page 64.
  */
+#define  LL_GPIO_ENABLE1_W1TS	(LL_HWREG32(0x3FF44030)) // Registros para leer entradas en gios 32-39
 #define LL_SET_BIT_GPIO_ENABLE1_W1TS(x) (LL_GPIO_ENABLE1_W1TS = (1<<(x-32)))
 
 
-#define LL_GPIO_ENABLE1_W1TC	(LL_HWREG32(0x3FF44034)) // Registros para leer entradas en gios 32-39
 /**
  * @brief GPIO enable W1TC register (32 to 39)
  *
@@ -126,11 +127,11 @@
  * For every bit 1 written here, will be cleared in GPIO_ENABLE1_REG
  * @note Page 65.
  */
+#define LL_GPIO_ENABLE1_W1TC	(LL_HWREG32(0x3FF44034)) // Registros para leer entradas en gios 32-39
 #define LL_CLEAR_BIT_GPIO_ENABLE1_W1TC(x) (LL_GPIO_ENABLE1_W1TC = (1<<(x-32)))
 
 
 /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\GPIO OUT 0-31 REGISTERS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
-#define LL_GPIO_OUT_REG 	(LL_HWREG32(0x3FF44004))
 /**
  * @brief GPIO_OUT_REG for setting output value (0 to 31)
  *
@@ -144,8 +145,9 @@
  * If you only want to change one bit without changin the other bits, better use GPIO_OUT_W1TS & GPIO_OUT_W1TC.
  * @note Page 62.
  */
+#define LL_GPIO_OUT_REG 	(LL_HWREG32(0x3FF44004))
 
-#define LL_GPIO_OUT_W1TS 	(LL_HWREG32(0x3FF44008)) // Registro para encender (SET) GPIO 0-31 output
+
 /**
  * @brief GPIO_OUT_W1TS register for setting bit on GPIO_OUT_REG register
  *
@@ -158,10 +160,10 @@
  * Every bit 1 written here will be set 1 in GPIO_OUT_REG
  * @note Page 62.
  */
+#define LL_GPIO_OUT_W1TS 	(LL_HWREG32(0x3FF44008)) // Registro para encender (SET) GPIO 0-31 output
 #define LL_SET_BIT_GPIO_OUT_W1TS(x)	 (LL_GPIO_OUT_W1TS = (1<<(x)))
 
 
-#define LL_GPIO_OUT_W1TC	(LL_HWREG32(0x3FF4400C)) // Registro para apagar (CLEAR) GPIO 0-31
 /**
  * @brief GPIO_OUT_W1TC register for clearing bit on GPIO_OUT_REG register
  * 
@@ -174,12 +176,12 @@
  * For every bit 1 written here, will be cleared in GPIO_OUT_REG
  * @note Page 62.
  */
+#define LL_GPIO_OUT_W1TC	(LL_HWREG32(0x3FF4400C)) // Registro para apagar (CLEAR) GPIO 0-31
 #define LL_CLEAR_BIT_GPIO_OUT_W1TC(x)	 (LL_GPIO_OUT_W1TC = (1<<(x)))
 
 
 
 /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\GPIO OUT 32-39 REGISTERS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
-#define LL_GPIO_OUT1_REG 	(LL_HWREG32(0x3FF44010))
 /**
  * @brief GPIO_OUT1_REG register for set and clear value of GPIO (32 to 39)
  *
@@ -193,8 +195,8 @@
  * If you only want to change one bit without changin the other bits, better use GPIO_OUT_W1TS & GPIO_OUT_W1TC.
  * @note Page 63.
  */
+#define LL_GPIO_OUT1_REG 	(LL_HWREG32(0x3FF44010))
 
-#define LL_GPIO_OUT1_W1TS	(LL_HWREG32(0x3FF44014)) // Registros para leer entradas en gios 32-39
 /**
  * @brief GPIO 32-39 output set register
  *
@@ -206,9 +208,10 @@
  * Every bit 1 written here will be set 1 GPIO_OUT1_DATA
  * @note Page 63.
  */
+#define LL_GPIO_OUT1_W1TS	(LL_HWREG32(0x3FF44014)) // Registros para leer entradas en gios 32-39
 #define LL_SET_BIT_GPIO_OUT1_W1TS(x) (LL_GPIO_OUT1_W1TS = (1<<(x-32)))
 
-#define LL_GPIO_OUT1_W1TC	(LL_HWREG32(0x3FF44018)) // Registros para leer entradas en gios 32-39
+
 /**
  * @brief GPIO 32-39 output clear register
  *
@@ -220,11 +223,11 @@
  * For every bit 1 written here, will be cleared in GPIO_OUT1_DATA
  * @note Page 63.
  */
+#define LL_GPIO_OUT1_W1TC	(LL_HWREG32(0x3FF44018)) // Registros para leer entradas en gios 32-39
 #define LL_CLEAR_BIT_GPIO_OUT1_W1TC(x) (LL_GPIO_OUT1_W1TC = (1<<(x-32)))
 
 
 /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\GPIO IN REGISTERS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
-#define LL_GPIO_IN_REG		(LL_HWREG32(0x3FF4403C)) // Registro para leer entradas en gpios 0-31
 /**
  * @brief GPIO 0-31 input value register
  *
@@ -238,9 +241,10 @@
  *	* Low  0
  * @note Page 65.
  */
+#define LL_GPIO_IN_REG		(LL_HWREG32(0x3FF4403C)) // Registro para leer entradas en gpios 0-31
 #define LL_READ_BIT_GPIO_IN_REG(x)	 (LL_GPIO_IN_REG & (1<<(x)))
 
-#define LL_GPIO_IN1_REG	(LL_HWREG32(0x3FF44040)) // Registros para leer entradas en gios 32-39
+
 /**
  * @brief GPIO 32-39 input value register
  *
@@ -254,6 +258,7 @@
  *	* Low  0
  * @note Page 65.
  */
+#define LL_GPIO_IN1_REG	(LL_HWREG32(0x3FF44040)) // Registros para leer entradas en gios 32-39
 #define LL_READ_BIT_GPIO_IN1_REG(x) (LL_GPIO_IN1_REG & (1<<(x-32)))
 
 

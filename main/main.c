@@ -143,7 +143,7 @@ void fase_presentacion(){
 	if(aux1){
 		aux1 = false;
 		printf(	"================================================================================\n"
-		   		"		Bienvenido a Proyecto Firmware Ene-jun 2026 V9\n"
+		   		"		Bienvenido a Proyecto Firmware Ene-jun 2026 V14\n"
 		   		"================================================================================\n"
 		   		"   Integrantes:\n"
 		  		"	* Hector Said Herrera Nino: 22061074\n"

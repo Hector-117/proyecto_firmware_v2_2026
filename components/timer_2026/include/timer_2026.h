@@ -21,7 +21,6 @@
 #define LLT_HWREG32(x)        (*((volatile uint32_t *)(x)))
 #define LLT_HW_PTR_REG32(x)   ((volatile uint32_t *)(x))
 
-#define LL_ADVANCED_PERIPHERAL_BUS_CLK_FREQ 80 //80MHz
 /**
  * @brief advanced pheripheral bus clock frequency
  * 
@@ -33,6 +32,8 @@
  * 
  * @note https://www.linkedin.com/posts/kshitij-vaze-dubistweltmeister05_the-arm-bus-interface-is-a-thing-of-beauty-activity-7370645131835822080-3EjC/
  */
+#define LL_ADVANCED_PERIPHERAL_BUS_CLK_FREQ 80 //80MHz
+
 
 typedef enum{
 	LL_TIMG0_T0 = 0,
@@ -50,11 +51,6 @@ typedef enum{
 	LL_LEVEL,
 	LL_EDGE
 } ll_int_mode_t;
-
-#define LL_TIMG0_T0CONFIG_REG   LLT_HW_PTR_REG32(0x3FF5F000)
-#define LL_TIMG1_T0CONFIG_REG   LLT_HW_PTR_REG32(0x3FF60000)
-#define LL_TIMG0_T1CONFIG_REG   LLT_HW_PTR_REG32(0x3FF5F024)
-#define LL_TIMG1_T1CONFIG_REG   LLT_HW_PTR_REG32(0x3FF60024)
 
 /**
   * @brief  Timer 0 configuration register (0x3FF5F000)
@@ -77,6 +73,10 @@ typedef enum{
   * Timer must be disabled before changin the prescaler divisor
   * page 497
   */
+#define LL_TIMG0_T0CONFIG_REG   LLT_HW_PTR_REG32(0x3FF5F000)
+#define LL_TIMG1_T0CONFIG_REG   LLT_HW_PTR_REG32(0x3FF60000)
+#define LL_TIMG0_T1CONFIG_REG   LLT_HW_PTR_REG32(0x3FF5F024)
+#define LL_TIMG1_T1CONFIG_REG   LLT_HW_PTR_REG32(0x3FF60024)
  
 #define LL_TIMGn_Tx_EN 		      (1<<31)
 #define LL_TIMGn_Tx_INCREASE      (1<<30)
@@ -106,11 +106,6 @@ typedef enum{
 #define LL_CLEAR_DIVIDER(x) 		(*(x) &= ~(0xFFFF<<13))
 #define LL_SET_DIVIDER(x,prescaler) (*(x) |= (prescaler << 13))
 
-
-#define LL_TIMG0_T0ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF5F010))
-#define LL_TIMG1_T0ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF60010))
-#define LL_TIMG0_T1ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF5F034))
-#define LL_TIMG1_T1ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF60034))
 /**
  * @brief Timer x alarm trigger time-base counter value, low 32 bits. (R/W)
  *
@@ -119,11 +114,12 @@ typedef enum{
  *								0x000000000								Reset
  * @note Page 498.
  */
+#define LL_TIMG0_T0ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF5F010))
+#define LL_TIMG1_T0ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF60010))
+#define LL_TIMG0_T1ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF5F034))
+#define LL_TIMG1_T1ALARMLO_REG (LLT_HW_PTR_REG32(0x3FF60034))
 
-#define LL_TIMG0_T0ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF5F014))
-#define LL_TIMG1_T0ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF60014))
-#define LL_TIMG0_T1ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF5F038))
-#define LL_TIMG1_T1ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF60038))
+
 /**
  * @brief Timer x alarm trigger time-base counter value, high 32 bits. (R/W)
  *
@@ -140,11 +136,11 @@ typedef enum{
  * 		* LL_TIMG0_T0LOADHI_REG
  * @note page 223
  */
+#define LL_TIMG0_T0ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF5F014))
+#define LL_TIMG1_T0ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF60014))
+#define LL_TIMG0_T1ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF5F038))
+#define LL_TIMG1_T1ALARMHI_REG (LLT_HW_PTR_REG32(0x3FF60038))
 
-#define LL_TIMG0_T0LOADLO_REG (LLT_HW_PTR_REG32(0x3FF5F018))
-#define LL_TIMG1_T0LOADLO_REG (LLT_HW_PTR_REG32(0x3FF60018))
-#define LL_TIMG0_T1LOADLO_REG (LLT_HW_PTR_REG32(0x3FF5F03C))
-#define LL_TIMG1_T1LOADLO_REG (LLT_HW_PTR_REG32(0x3FF6003C))
 /**
  * @brief Timer 0 reload value, low 32 bits
  *
@@ -157,11 +153,12 @@ typedef enum{
  * 
  * @note Page 244 (esp32_technical_reference_manual_v5.5).
  */
+#define LL_TIMG0_T0LOADLO_REG (LLT_HW_PTR_REG32(0x3FF5F018))
+#define LL_TIMG1_T0LOADLO_REG (LLT_HW_PTR_REG32(0x3FF60018))
+#define LL_TIMG0_T1LOADLO_REG (LLT_HW_PTR_REG32(0x3FF5F03C))
+#define LL_TIMG1_T1LOADLO_REG (LLT_HW_PTR_REG32(0x3FF6003C))
 
-#define LL_TIMG0_T0LOADHI_REG (LLT_HW_PTR_REG32(0x3FF5F01C))
-#define LL_TIMG1_T0LOADHI_REG (LLT_HW_PTR_REG32(0x3FF6001C))
-#define LL_TIMG0_T1LOADHI_REG (LLT_HW_PTR_REG32(0x3FF5F040))
-#define LL_TIMG1_T1LOADHI_REG (LLT_HW_PTR_REG32(0x3FF60040))
+
 /**
  * @brief Timer 0 reload value, high 32 bits
  *
@@ -174,11 +171,12 @@ typedef enum{
  * 
  * @note Page 224 (esp32_technical_reference_manual_v5.5).
  */
+#define LL_TIMG0_T0LOADHI_REG (LLT_HW_PTR_REG32(0x3FF5F01C))
+#define LL_TIMG1_T0LOADHI_REG (LLT_HW_PTR_REG32(0x3FF6001C))
+#define LL_TIMG0_T1LOADHI_REG (LLT_HW_PTR_REG32(0x3FF5F040))
+#define LL_TIMG1_T1LOADHI_REG (LLT_HW_PTR_REG32(0x3FF60040))
 
-#define LL_TIMG0_T0LOAD_REG (LLT_HW_PTR_REG32(0x3FF5F020))
-#define LL_TIMG1_T0LOAD_REG (LLT_HW_PTR_REG32(0x3FF60020))
-#define LL_TIMG0_T1LOAD_REG (LLT_HW_PTR_REG32(0x3FF5F044))
-#define LL_TIMG1_T1LOAD_REG (LLT_HW_PTR_REG32(0x3FF60044))
+
 /**
  * @brief Write to reload timer from TIMGn_T0_(LOADLOLOADHI)_REG
  *
@@ -187,11 +185,12 @@ typedef enum{
  *
  * @note Page 495
  */
+#define LL_TIMG0_T0LOAD_REG (LLT_HW_PTR_REG32(0x3FF5F020))
+#define LL_TIMG1_T0LOAD_REG (LLT_HW_PTR_REG32(0x3FF60020))
+#define LL_TIMG0_T1LOAD_REG (LLT_HW_PTR_REG32(0x3FF5F044))
+#define LL_TIMG1_T1LOAD_REG (LLT_HW_PTR_REG32(0x3FF60044))
 
-#define LL_TIMG0_T0LO_REG (LLT_HW_PTR_REG32(0x3FF5F004))
-#define LL_TIMG1_T0LO_REG (LLT_HW_PTR_REG32(0x3FF60004))
-#define LL_TIMG0_T1LO_REG (LLT_HW_PTR_REG32(0x3FF5F028))
-#define LL_TIMG1_T1LO_REG (LLT_HW_PTR_REG32(0x3FF60028))
+
 /**
  * @brief Timer 0 current value, low 32 bits
  *
@@ -204,11 +203,12 @@ typedef enum{
  *
  * @note Page 497.
  */
+#define LL_TIMG0_T0LO_REG (LLT_HW_PTR_REG32(0x3FF5F004))
+#define LL_TIMG1_T0LO_REG (LLT_HW_PTR_REG32(0x3FF60004))
+#define LL_TIMG0_T1LO_REG (LLT_HW_PTR_REG32(0x3FF5F028))
+#define LL_TIMG1_T1LO_REG (LLT_HW_PTR_REG32(0x3FF60028))
 
-#define LL_TIMG0_T0HI_REG (LLT_HW_PTR_REG32(0x3FF5F008))
-#define LL_TIMG1_T0HI_REG (LLT_HW_PTR_REG32(0x3FF60008))
-#define LL_TIMG0_T1HI_REG (LLT_HW_PTR_REG32(0x3FF5F02C))
-#define LL_TIMG1_T1HI_REG (LLT_HW_PTR_REG32(0x3FF6002C))
+
 /**
  * @brief Timer 0 current value, high 32 bits
  *
@@ -221,9 +221,12 @@ typedef enum{
  *
  * @note Page 497.
  */
+#define LL_TIMG0_T0HI_REG (LLT_HW_PTR_REG32(0x3FF5F008))
+#define LL_TIMG1_T0HI_REG (LLT_HW_PTR_REG32(0x3FF60008))
+#define LL_TIMG0_T1HI_REG (LLT_HW_PTR_REG32(0x3FF5F02C))
+#define LL_TIMG1_T1HI_REG (LLT_HW_PTR_REG32(0x3FF6002C))
 
-#define LL_TIMGn_T0UPDATE_REG (LLT_HW_PTR_REG32(0x3FF5F00C))
-#define LL_TIMGn_T1UPDATE_REG (LLT_HW_PTR_REG32(0x3FF5F030))
+
 /**
  * @brief Write to copy current timer value to TIMGn_T0_(LO/HI)_REG
  *
@@ -233,15 +236,17 @@ typedef enum{
  *
  * @note Page 495
  */
+#define LL_TIMG0_T0UPDATE_REG (LLT_HW_PTR_REG32(0x3FF5F00C))
+#define LL_TIMG0_T1UPDATE_REG (LLT_HW_PTR_REG32(0x3FF5F030))
+#define LL_TIMG1_T1UPDATE_REG (LLT_HW_PTR_REG32(0x3FF60030))
+#define LL_TIMG1_T0UPDATE_REG (LLT_HW_PTR_REG32(0x3FF6000C))
+
 
 
 #define LL_CLEAR_32BIT_REG(x) 	   (*(x) = 0)
 #define LL_SET_32BIT_REG(x,value)  (*(x) = value)
 
 
-
-#define LL_TIMG0_INT_RAW_REG (LLT_HW_PTR_REG32(0x3FF5F09C))
-#define LL_TIMG1_INT_RAW_REG (LLT_HW_PTR_REG32(0x3FF6009C))
 /**
  * @brief Raw interrupt status
  *
@@ -255,6 +260,9 @@ typedef enum{
  * [2] TIMGn_INT_T0_INT_RAW: The raw interrupt status bit for the TIMGn_INT_T0_INT interrupt. (RO)
  * @note Page 503.
  */
+#define LL_TIMG0_INT_RAW_REG (LLT_HW_PTR_REG32(0x3FF5F09C))
+#define LL_TIMG1_INT_RAW_REG (LLT_HW_PTR_REG32(0x3FF6009C))
+
 
 #define LL_TIMGn_INT_T0_INT_RAW  (1<<0)
 #define LL_TIMGn_INT_T1_INT_RAW  (1<<1)
@@ -265,8 +273,6 @@ typedef enum{
 #define LL_READ_STATE_T0_INT_RAW(x)  ((*(x) & LL_TIMGn_INT_T0_INT_RAW) != 0)
 
 
-#define LL_TIMG0_INT_CLR_REG (LLT_HW_PTR_REG32(0x3FF5F0A4))
-#define LL_TIMG1_INT_CLR_REG (LLT_HW_PTR_REG32(0x3FF600A4))
 /**
  * @brief Interrupt clear bits
  *
@@ -280,11 +286,14 @@ typedef enum{
  * [2] TIMGn_Tx_INT_T0_INT_CLR Set this bit to clear the TIMGn_Tx_INT_T0_INT interrupt. (WO)
  * @note Page 504.
  */
+#define LL_TIMG0_INT_CLR_REG (LLT_HW_PTR_REG32(0x3FF5F0A4))
+#define LL_TIMG1_INT_CLR_REG (LLT_HW_PTR_REG32(0x3FF600A4))
+
 
 typedef enum{
 	LL_CLR_T0_INT,
 	LL_CLR_T1_INT,
-	LL_CLR_WDT_int
+	LL_CLR_WDT_INT
 } ll_clear_int_t;
  
 #define LL_TIMGn_Tx_INT_T0_INT_CLR  (1<<0)
