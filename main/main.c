@@ -11,6 +11,7 @@
  * @date 2026-06-01
  */
 #include "hal.h"
+#include "esp_task_wdt.h"
 
 void fase_presentacion();
 void rgb_logic();
@@ -47,6 +48,7 @@ int btn1, btn2;
 
 void app_main(void)
 {
+	esp_task_wdt_deinit();
 	hal_esp_init();
 	hal_set_RGB_color(HAL_BLACK);
 
@@ -86,7 +88,8 @@ void app_main(void)
 				rgb_logic();
 		}
 		
-		vTaskDelay(pdMS_TO_TICKS(250));
+		hal_delay(250000);
+		//vTaskDelay(pdMS_TO_TICKS(250));
 	}
 }
 
@@ -95,7 +98,7 @@ void fase_presentacion(){
 	if(aux1){
 		aux1 = false;
 		printf(	"================================================================================\n"
-		   		"		Bienvenido a Proyecto Firmware Ene-jun 2026 V3x\n"
+		   		"		Bienvenido a Proyecto Firmware Ene-jun 2026 V4\n"
 		   		"================================================================================\n"
 		   		"   Integrantes:\n"
 		  		"	* Hector Said Herrera Nino: 22061074\n"

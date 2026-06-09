@@ -104,5 +104,8 @@ bool hal_btn_get_actual_state(int button);
  * @note the callback is void return and void arguments
  */
 void hal_periodic_fun(int time_us, hal_callback_t callback);
+
+
+void hal_delay(int time_us);
 #endif
 

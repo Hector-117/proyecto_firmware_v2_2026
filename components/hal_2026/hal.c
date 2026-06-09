@@ -137,3 +137,44 @@ void hal_periodic_fun(int time_us, hal_callback_t callback){
     );
 	
 }
+
+bool alarm_delay = false;
+static void IRAM_ATTR hal_delay_isr(void *arg)
+{
+    alarm_delay = true;
+	bsp_reset_timer_loop(BSP_TIMER1);
+}
+
+
+bool loop_onetime = true;
+void hal_delay(int time_us){
+	if (loop_onetime){
+		loop_onetime = false;
+		
+		bsp_timer_config_t timer_struct_config = {
+			.bsp_timer = BSP_TIMER1,
+			.bsp_freq_divider = 80,
+			.bsp_count_mode = BSP_UP,
+			.bsp_alarm_enable = true,
+			.bsp_autoreload_enable = true,
+			.bsp_int_mode = BSP_LEVEL,
+			.bsp_alarm_value = time_us,
+			.bsp_load_value = 0
+		};
+		
+		bsp_timer_init(&timer_struct_config);
+	
+		esp_intr_alloc(
+	        ETS_TG0_T1_LEVEL_INTR_SOURCE,
+	        ESP_INTR_FLAG_IRAM,
+	        hal_delay_isr,
+	        NULL,
+	        &hal_timer_handle
+    	);
+	}
+	
+	while(!alarm_delay){
+	};
+	
+	alarm_delay = false;
+}
