@@ -16,12 +16,18 @@
 void fase_presentacion();
 void rgb_logic();
 
+/**
+ * @brief Global counters used by the application.
+ */
 int contador_pulsaciones;
 int count_pulse_btn1;
 int count_pulse_btn2;
 
 int div_freq;
 
+/**
+ * @brief Auxiliary flags used by the state machine.
+ */
 bool aux1 = true;
 bool aux2 = true;
 bool aux3 = true;
@@ -32,20 +38,51 @@ bool aux7 = true;
 
 volatile bool flag = false;
 
+/**
+ * @brief Callback executed when button 1 is pressed.
+ *
+ * @details
+ * Increments the button 1 press counter.
+ */
 void function_boton1(void){
 	count_pulse_btn1++;
 }
 
+/**
+ * @brief Callback executed when button 2 is pressed.
+ *
+ * @details
+ * Increments the button 2 press counter.
+ */
 void function_boton2(void){
 	count_pulse_btn2++;
 }
 
+/**
+ * @brief Timer callback function.
+ *
+ * @details
+ * Sets a flag that is later processed
+ * inside the main application loop.
+ */
 void function_callback(void){
 	flag = true;
 }
 
-int btn1, btn2;
 
+/**
+ * @brief Main application entry point.
+ *
+ * @details
+ * Initializes the HAL, configures the periodic timer
+ * callback and executes the application state machine.
+ *
+ * States:
+ * - Presentation phase.
+ * - System initialization phase.
+ * - RGB control phase.
+ */
+int btn1, btn2;
 void app_main(void)
 {
 	esp_task_wdt_deinit();
@@ -94,11 +131,19 @@ void app_main(void)
 }
 
 
+/**
+ * @brief Presentation phase of the application.
+ *
+ * @details
+ * Displays project information and instructions
+ * through the serial terminal. This function is
+ * executed only once at startup.
+ */
 void fase_presentacion(){	
 	if(aux1){
 		aux1 = false;
 		printf(	"================================================================================\n"
-		   		"		Bienvenido a Proyecto Firmware Ene-jun 2026 V8\n"
+		   		"		Bienvenido a Proyecto Firmware Ene-jun 2026 V9\n"
 		   		"================================================================================\n"
 		   		"   Integrantes:\n"
 		  		"	* Hector Said Herrera Nino: 22061074\n"
@@ -118,6 +163,20 @@ void fase_presentacion(){
 	}
 }
 
+
+/**
+ * @brief RGB control state machine.
+ *
+ * @details
+ * Evaluates the number of button presses and
+ * selects the corresponding RGB color.
+ *
+ * Functions:
+ * - Magenta color.
+ * - Blue color.
+ * - Yellow color.
+ * - System restart.
+ */
 void rgb_logic(){
 	if (aux5){
 		aux5 = false;
