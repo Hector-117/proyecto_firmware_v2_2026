@@ -13,8 +13,6 @@
 
 #include "hal.h"
 #include <inttypes.h> // Required for PRIu32
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 
 void fase_presentacion();
 void rgb_logic();
@@ -42,7 +40,10 @@ bool aux7 = true;
 /**
  * @brief Flag set by timer interrupt callback.
  */
-volatile bool flag = false;
+volatile bool tick_250ms = false;
+volatile bool tick_1s = false;
+
+int tick_counter = 0;
 
 /**
  * @brief Callback executed when button 1 is pressed.
@@ -71,8 +72,17 @@ void function_boton2(void){
  * Sets a flag that is later processed
  * inside the main application loop.
  */
-void function_callback(void){
-	flag = true;
+void function_callback(void)
+{
+	tick_250ms = true;
+
+	tick_counter++;
+
+	if(tick_counter >= 4)
+	{
+		tick_counter = 0;
+		tick_1s = true;
+	}
 }
 
 int btn1, btn2;
@@ -97,6 +107,13 @@ void app_main(void)
 	hal_periodic_fun(250000, function_callback);
     
     while(true){
+		if(!tick_250ms)
+		{
+		continue;
+		}
+
+		tick_250ms = false;
+
 		hal_falling_edge(HAL_USER_BTN0, function_boton1);
 		hal_falling_edge(HAL_USER_BTN1, function_boton2);
 		printf("btn1 fuera = %d\n", hal_btn_get_actual_state(HAL_USER_BTN0));
@@ -113,8 +130,8 @@ void app_main(void)
 					printf("\nSistema iniciado... \n");
 				}
 				
-				if (flag){
-					flag = false;
+				if (tick_1s){
+				tick_1s = false;
 					div_freq++;
 					
 					if (div_freq % 2){
@@ -132,7 +149,7 @@ void app_main(void)
 				rgb_logic();
 		}
 		
-		vTaskDelay(pdMS_TO_TICKS(250));
+			
 	}
 }
 

@@ -16,14 +16,14 @@
 #include <stdio.h>
 #include "gpio_2026.h"
 
-
 /**
- * @brief Array for mapping GPIO with his IO_MUX_GPIOx register
+ * @brief IO_MUX register mapping table.
  *
  * @details
- * It let you to access to the register just knowing the GPIO
- *
- * @note designated initializers technique
+ * Each GPIO number is associated with its
+ * corresponding IO_MUX register address.
+ * This allows generic GPIO configuration
+ * without using multiple switch statements.
  */
 volatile uint32_t *LL_IO_MUX_x_REG[] = {
 	[LL_GPIO0]  = LL_IO_MUX_GPIO0_REG,
@@ -56,14 +56,24 @@ volatile uint32_t *LL_IO_MUX_x_REG[] = {
 	[LL_GPIO39] = LL_IO_MUX_GPIO39_REG,
 };
 
+/**
+ * @brief Read GPIO state.
+ * @param pin GPIO to read.
+ * @return true if GPIO is HIGH, false if GPIO is LOW.
+ */
 bool ll_gpio_read(ll_gpio_t pin){
 	if (pin < 32){
-		return (LL_READ_BIT_GPIO_IN_REG(pin) != 0); // Force to bool 0 or 1 value
+		return (LL_READ_BIT_GPIO_IN_REG(pin) != 0);
 	} else {
-		return (LL_READ_BIT_GPIO_IN1_REG(pin) != 0); // Force to bool 0 or 1 value
+		return (LL_READ_BIT_GPIO_IN1_REG(pin) != 0);
 	}
 }
 
+/**
+ * @brief Write logic value to GPIO.
+ * @param pin GPIO to write.
+ * @param valor true = HIGH, false = LOW.
+ */
 void ll_gpio_write(ll_gpio_t pin, bool valor){
 	if (valor){
 		if(pin < 32){
@@ -78,9 +88,16 @@ void ll_gpio_write(ll_gpio_t pin, bool valor){
 		} else{
 			LL_CLEAR_BIT_GPIO_OUT1_W1TC(pin);
 		}
-	}	
+	}
 }
 
+/**
+ * @brief Enable or disable GPIO output mode.
+ * @param pin GPIO to configure.
+ * @param valor true = output enabled, false = output disabled.
+ * @details
+ * This function modifies GPIO_ENABLE register bits.
+ */
 void ll_enable_output (ll_gpio_t pin, bool valor){
 	if (valor){
 		if(pin < 32){
@@ -98,31 +115,56 @@ void ll_enable_output (ll_gpio_t pin, bool valor){
 	}
 }
 
+/**
+ * @brief Configure GPIO as input.
+ * @param pin GPIO to configure.
+ * @param modo_pull Pull resistor configuration.
+ * @details
+ * Configure GPIO as input and select pull-up,
+ * pull-down or floating mode.
+ */
 void ll_gpio_config_in (ll_gpio_t pin, ll_input_mode_t modo_pull){
-	//disaable at first to stop GPIO conducing output
-	ll_enable_output(pin, false); //disable pin as output
+	// disable at first to stop GPIO conducting output
+	ll_enable_output(pin, false);
 
-	LL_ENABLE_PAD(LL_IO_MUX_x_REG[pin]); //Enable GPIO as input
-	LL_SET_MCU_SEL_FUN2(LL_IO_MUX_x_REG[pin]); //set function 2 (GPIO mode)
+	LL_ENABLE_PAD(LL_IO_MUX_x_REG[pin]);
+	LL_SET_MCU_SEL_FUN2(LL_IO_MUX_x_REG[pin]);
 
 	if (modo_pull == LL_PULL_UP){
 		LL_ENABLE_PULLUP(LL_IO_MUX_x_REG[pin]);
-	} else if (modo_pull == LL_PULL_DOWN){
+	}
+	else if (modo_pull == LL_PULL_DOWN){
 		LL_ENABLE_PULLDOWN(LL_IO_MUX_x_REG[pin]);
-	} else{
+	}
+	else{
 		LL_FLOATING_GPIO(LL_IO_MUX_x_REG[pin]);
 	}
 }
 
+/**
+ * @brief Configure GPIO as output.
+ * @param pin GPIO to configure.
+ * @details
+ * GPIO starts with LOW state and output enabled.
+ */
 void ll_gpio_config_out(ll_gpio_t pin){
-	LL_SET_MCU_SEL_FUN2(LL_IO_MUX_x_REG[pin]); //set function 2 (GPIO mode)
-	ll_gpio_write(pin, false); //GPIO starts with low value
-	ll_enable_output(pin, true); //enable pin as output
-	//enable at end to start GPIO conducing
+	LL_SET_MCU_SEL_FUN2(LL_IO_MUX_x_REG[pin]);
+	ll_gpio_write(pin, false);
+	ll_enable_output(pin, true);
 }
 
-// ========= EXTRA =========
-void ll_gpio_config2026(ll_gpio_t pin, ll_input_mode_t modo, ll_gpio_mode_t modo_gpio){
+/**
+ * @brief General GPIO configuration function.
+ * @param pin GPIO to configure.
+ * @param modo Pull resistor configuration.
+ * @param modo_gpio Select input or output mode.
+ * @details
+ * Function that allows configuring
+ * GPIO as input or output using a single call.
+ */
+void ll_gpio_config2026(ll_gpio_t pin,
+                        ll_input_mode_t modo,
+                        ll_gpio_mode_t modo_gpio){
 	if(modo_gpio == LL_INPUT){
 		ll_gpio_config_in(pin, modo);
 	}

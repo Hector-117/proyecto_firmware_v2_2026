@@ -13,11 +13,11 @@
  * @note Based on ESP32 Technical Reference Manual v4.6. 
  */
  
-#include <stdio.h>
+//#include <stdio.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
+//#include <freertos/FreeRTOS.h>
+//#include <freertos/task.h>
 
 #define LL_HWREG32(x)        (*((volatile uint32_t *)(x)))
 /**
@@ -453,7 +453,7 @@ void ll_gpio_config_out(ll_gpio_t pin);
 // ========= EXTRA =========
 typedef enum modo{
 	LL_INPUT,
-	LL_OUTPUI
+	LL_OUTPUT
 }ll_gpio_mode_t;
 
 /**

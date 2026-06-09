@@ -1,5 +1,5 @@
 /**
- * @file timer_2026.c
+ * @file timer_2026.h
  * @brief Low-Level timer Driver for ESP32 header file.
  *
  * @details
@@ -16,6 +16,7 @@
  */
 
 #include <stdbool.h>
+#include <unistd.h>
 #include <stdio.h>
 
 #define LLT_HWREG32(x)        (*((volatile uint32_t *)(x)))
@@ -49,7 +50,7 @@ typedef enum{
 typedef enum{
 	LL_LEVEL,
 	LL_EDGE
-} ll_int_mode_t;
+} ll_int_mode_t; 
 
 #define LL_TIMG0_T0CONFIG_REG   LLT_HW_PTR_REG32(0x3FF5F000)
 #define LL_TIMG1_T0CONFIG_REG   LLT_HW_PTR_REG32(0x3FF60000)
