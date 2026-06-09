@@ -105,7 +105,13 @@ bool hal_btn_get_actual_state(int button);
  */
 void hal_periodic_fun(int time_us, hal_callback_t callback);
 
-
+/**
+ * @brief function for blocking CPU delay
+ * @param time_us time in microsec the delay will stop the program
+ * @details
+ * This function configure timer and isr. always will configure for:
+ * module 0 timer 1.
+ */
 void hal_delay(int time_us);
 #endif
 

@@ -138,6 +138,14 @@ void hal_periodic_fun(int time_us, hal_callback_t callback){
 	
 }
 
+
+/**
+ * @brief callback that the timer alarm will call (for delay)
+ * @param arg void pointer but NULL is received
+ * @details 
+ * This callback will rise a flag, and the delay logic is constantly polling the flag
+ * and continue next instruction when flag is true
+ */
 bool alarm_delay = false;
 static void IRAM_ATTR hal_delay_isr(void *arg)
 {
@@ -145,6 +153,10 @@ static void IRAM_ATTR hal_delay_isr(void *arg)
 	bsp_reset_timer_loop(BSP_TIMER1);
 }
 
+/**
+ * @brief handler for interruption delay. esp_intr_alloc() need it.
+ */
+static intr_handle_t hal_delay_handle;
 
 bool loop_onetime = true;
 void hal_delay(int time_us){
@@ -169,7 +181,7 @@ void hal_delay(int time_us){
 	        ESP_INTR_FLAG_IRAM,
 	        hal_delay_isr,
 	        NULL,
-	        &hal_timer_handle
+	        &hal_delay_handle
     	);
 	}
 	
