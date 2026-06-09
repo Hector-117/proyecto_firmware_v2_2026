@@ -10,12 +10,7 @@
  * @author José Francisco Padilla Torres
  * @date 2026-06-01
  */
-#include "soc/timer_group_struct.h"
-#include "soc/timer_group_reg.h"
-#include "bsp_board.h"
 #include "hal.h"
-#include <inttypes.h> // Required for PRIu32
-#include "esp_intr_alloc.h"
 
 void fase_presentacion();
 void rgb_logic();
@@ -60,8 +55,6 @@ void app_main(void)
     while(true){
 		hal_falling_edge(HAL_USER_BTN0, function_boton1);
 		hal_falling_edge(HAL_USER_BTN1, function_boton2);
-		printf("btn1 fuera = %d\n", hal_btn_get_actual_state(HAL_USER_BTN0));
-		printf("btn2 fuera = %d\n", hal_btn_get_actual_state(HAL_USER_BTN1));
 		contador_pulsaciones = count_pulse_btn1 + count_pulse_btn2;
 		
 		switch (contador_pulsaciones){
@@ -102,7 +95,7 @@ void fase_presentacion(){
 	if(aux1){
 		aux1 = false;
 		printf(	"================================================================================\n"
-		   		"		Bienvenido a Proyecto Firmware Ene-jun 2026\n"
+		   		"		Bienvenido a Proyecto Firmware Ene-jun 2026 V3x\n"
 		   		"================================================================================\n"
 		   		"   Integrantes:\n"
 		  		"	* Hector Said Herrera Nino: 22061074\n"
@@ -125,12 +118,8 @@ void fase_presentacion(){
 void rgb_logic(){
 	if (aux5){
 		aux5 = false;
-		printf("btn1 = %d\n", hal_btn_get_actual_state(HAL_USER_BTN0));
-		printf("btn2 = %d\n", hal_btn_get_actual_state(HAL_USER_BTN1));
 		count_pulse_btn1 = (!hal_btn_get_actual_state(HAL_USER_BTN0)) ? 2 : 1;
 		count_pulse_btn2 = (!hal_btn_get_actual_state(HAL_USER_BTN1)) ? 2 : 1;
-		//printf("btn1 = %d\n", count_pulse_btn1);
-		//printf("btn2 = %d\n", count_pulse_btn2);
 	}
 	
 	if ((count_pulse_btn1 == 4) || (count_pulse_btn2 == 4)){

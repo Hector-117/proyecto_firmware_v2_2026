@@ -16,6 +16,7 @@
 
 //# include "../../bsp_board/include/bsp_board.h"
 # include "bsp_board.h"
+#include "esp_intr_alloc.h"
 
 #define HAL_USER_BTN0 BSP_PUSH_BUTTON_0
 #define HAL_USER_BTN1 BSP_PUSH_BUTTON_1
@@ -80,7 +81,17 @@ void hal_status_vector(uint8_t vector_value);
  */
 void hal_set_RGB_color(uint8_t vector_value);
 
+/**
+ * @brief Reads the status and makes a toggle
+ */
 void hal_toggle_status_vector();
+
+/**
+ * @brief Reads the value of the vector 
+ * @param button the button which is wanted to know his actual state
+ * @details
+ * this function returns the .bsp_actual_state value
+ */
 bool hal_btn_get_actual_state(int button);
 
 /**

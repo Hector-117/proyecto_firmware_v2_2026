@@ -19,7 +19,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
-#define LL_HWREG32(x)        (*((volatile uint32_t *)(x)))
+
 /**
  * @brief Access to register Macro function.
  *
@@ -27,14 +27,15 @@
  * (volatile uint32_t *)(x)) 	==> Means that it's a pointer to the direction
  * *((volatile uint32_t *)(x)) 	==> Means that you're dereferencing that direction
  */
+#define LL_HWREG32(x)        (*((volatile uint32_t *)(x)))
 
-#define LL_HW_PTR_REG32(x)   ((volatile uint32_t *)(x))
 /**
  * @brief pointer to register Macro function.
  *
  * @details
  * (volatile uint32_t *)(x)) 	==> Means that it's a pointer to the direction
  */
+#define LL_HW_PTR_REG32(x)   ((volatile uint32_t *)(x))
 
 /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\MACROFUNCIONES PARA ACCESO A REGISTROS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
 
