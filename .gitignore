@@ -1,0 +1,81 @@
+# ESP-IDF Build artifacts
+build/
+managed_components/
+dependencies.lock
+
+# Build outputs
+*.bin
+*.elf
+*.map
+*.o
+*.a
+*.d
+
+# ESP-IDF Configuration
+sdkconfig.old
+sdkconfig.tmp
+sdkconfig~
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Python and Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+ENV/
+env/
+.env
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# IDE caches
+.cppcheck/
+compile_commands.json
+
+# CMake
+CMakeUserPresets.json
+CMakeLists.txt.user
+
+# Clion
+cmake-build-*/
+
+# Visual Studio Code
+*.code-workspace
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+$RECYCLE.BIN/
+
+# Git
+.git/
+.gitmodules
+
+# Development temporary files
+*.pyc
+.coverage
+.tox/
+htmlcov/
+
+# Project specific
+*.bak
+*.backup
+debug.log
